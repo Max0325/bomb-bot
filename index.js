@@ -18,7 +18,7 @@ function handleEvent(event) {
 							type: 'text',
 							text:
 								'userId:' +
-								userId +
+								source.userId +
 								' 你的名字是: ' +
 								profile.displayName +
 								'，你的狀態是: ' +
@@ -31,7 +31,7 @@ function handleEvent(event) {
 							type: 'text',
 							text:
 								'groupId:' +
-								groupId +
+								source.groupId +
 								' 你的名字是: ' +
 								profile.displayName +
 								'，你的狀態是: ' +
@@ -44,7 +44,7 @@ function handleEvent(event) {
 							type: 'text',
 							text:
 								'roomId:' +
-								roomId +
+								source.roomId +
 								' 你的名字是: ' +
 								profile.displayName +
 								'，你的狀態是: ' +
