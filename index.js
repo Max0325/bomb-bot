@@ -10,6 +10,7 @@ const app = express();
 function handleEvent(event) {
 	switch (event.message.type) {
 		case 'text':
+			var source = event.source;
 			switch (source.type) {
 				case 'user':
 					return client.getProfile(source.userId).then(function(profile) {
