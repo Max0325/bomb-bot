@@ -16,21 +16,39 @@ function handleEvent(event) {
 					return client.getProfile(source.userId).then(function(profile) {
 						return client.replyMessage(event.replyToken, {
 							type: 'text',
-							text: '你的名字是: ' + profile.displayName + '，你的狀態是: ' + profile.statusMessage
+							text:
+								'userId:' +
+								userId +
+								' 你的名字是: ' +
+								profile.displayName +
+								'，你的狀態是: ' +
+								profile.statusMessage
 						});
 					});
 				case 'group':
 					return client.getGroupMemberProfile(source.groupId, source.userId).then(function(profile) {
 						return client.replyMessage(event.replyToken, {
 							type: 'text',
-							text: '你的名字是: ' + profile.displayName + '，你的狀態是: ' + profile.statusMessage
+							text:
+								'groupId:' +
+								groupId +
+								' 你的名字是: ' +
+								profile.displayName +
+								'，你的狀態是: ' +
+								profile.statusMessage
 						});
 					});
 				case 'room':
 					return client.getRoomMemberProfile(source.roomId, source.userId).then(function(profile) {
 						return client.replyMessage(event.replyToken, {
 							type: 'text',
-							text: '你的名字是: ' + profile.displayName + '，你的狀態是: ' + profile.statusMessage
+							text:
+								'roomId:' +
+								roomId +
+								' 你的名字是: ' +
+								profile.displayName +
+								'，你的狀態是: ' +
+								profile.statusMessage
 						});
 					});
 			}
