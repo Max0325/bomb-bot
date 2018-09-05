@@ -35,7 +35,9 @@ function handleEvent(event) {
 								' 你的名字是: ' +
 								profile.displayName +
 								'，你的狀態是: ' +
-								profile.statusMessage
+								profile.statusMessage +
+								'，你的profile是: ' +
+								JSON.stringify(profile)
 						});
 					});
 				case 'room':
