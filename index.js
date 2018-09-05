@@ -7,16 +7,6 @@ const lineConfig = {
 const client = new line.Client(lineConfig);
 const app = express();
 
-app.listen(3000, function() {
-	console.log('App now running on port', this.address().port);
-});
-
-app.post('/', line.middleware(lineConfig), function(req, res) {
-	Promise.all(req.body.events.map(handleEvent)).then(function(result) {
-		res.json(result);
-	});
-});
-
 function handleEvent(event) {
 	switch (event.message.type) {
 		case 'text':
@@ -45,3 +35,14 @@ function handleEvent(event) {
 			}
 	}
 }
+
+app.post('/', line.middleware(lineConfig), function(req, res) {
+	Promise.all(req.body.events.map(handleEvent)).then(function(result) {
+		res.json(result);
+	});
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+	console.log(`listening on ${port}`);
+});
