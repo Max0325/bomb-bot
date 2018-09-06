@@ -13,12 +13,25 @@ function handleEvent(event) {
 			var source = event.source;
 			return client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
 				var type = typing(event.message.text);
+				console.log('type:', type);
 				if (type == 0) return;
 				if (type == 3) {
-					return client.replyMessage(event.replyToken, {
-						type: 'text',
-						text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
-					});
+					return client.replyMessage(
+						event.replyToken,
+						{
+							type: 'datetimepicker',
+							label: 'Select date',
+							data: 'storeId=12345',
+							mode: 'datetime',
+							initial: '2017-12-25t00:00',
+							max: '2018-01-24t23:59',
+							min: '2017-12-25t00:00'
+						}
+						// {
+						// 	type: 'text',
+						// 	text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
+						// }
+					);
 				}
 			});
 	}
