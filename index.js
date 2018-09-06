@@ -16,7 +16,7 @@ function handleEvent(event) {
 				console.log('type:', type);
 				if (type == 0) return;
 				if (type == 3) {
-					return client.replyMessage(replyToken, {
+					return client.replyMessage(event.replyToken, {
 						type: 'template',
 						altText: 'Datetime pickers alt text',
 						template: {
