@@ -25,8 +25,8 @@ function handleEvent(event) {
 				//   return handleVideo(message, event.replyToken);
 				// case 'audio':
 				//   return handleAudio(message, event.replyToken);
-				// case 'location':
-				//   return handleLocation(message, event.replyToken);
+				case 'location':
+					return handleLocation(message, event.replyToken);
 				// case 'sticker':
 				//   return handleSticker(message, event.replyToken);
 				default:
@@ -74,14 +74,20 @@ function handleText(message, replyToken, source) {
 					template: {
 						type: 'buttons',
 						text: 'Select date / time !',
-						actions: [
-							{ type: 'datetimepicker', label: 'date', data: 'DATE', mode: 'date' },
-							{ type: 'datetimepicker', label: 'time', data: 'TIME', mode: 'time' },
-							{ type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' }
-						]
+						actions: [ { type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' } ]
 					}
 				});
 		}
+	});
+}
+
+function handleLocation(message, replyToken) {
+	return client.replyMessage(replyToken, {
+		type: 'location',
+		title: message.title,
+		address: message.address,
+		latitude: message.latitude,
+		longitude: message.longitude
 	});
 }
 
