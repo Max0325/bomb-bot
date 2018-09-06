@@ -30,25 +30,6 @@ function handleEvent(event) {
 										data: '資料 1'
 									}
 								]
-							},
-							{
-								title: 'Detail',
-								text: '',
-								actions: [
-									{
-										type: 'message',
-										label: 'test',
-										text:
-											'groupId:' +
-											source.groupId +
-											' 你的名字是: ' +
-											profile.displayName +
-											'，你的狀態是: ' +
-											profile.statusMessage +
-											'，你的profile是: ' +
-											JSON.stringify(profile)
-									}
-								]
 							}
 						]
 					}
