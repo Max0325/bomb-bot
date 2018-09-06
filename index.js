@@ -32,17 +32,6 @@ function handleEvent(event) {
 								]
 							},
 							{
-								title: '觀音拿鐵 微糖微冰',
-								text: '上次訂了2杯唷  啾咪～',
-								actions: [
-									{
-										type: 'message',
-										label: '＋1',
-										text: '+1 觀音拿鐵 微糖微冰'
-									}
-								]
-							},
-							{
 								title: 'Detail',
 								text: '',
 								actions: [
