@@ -49,8 +49,8 @@ function handleEvent(event) {
 									{
 										type: 'message',
 										label: '＋1',
-										text:
-											'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
+										text: 'QQ'
+										// 'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
 									}
 								]
 							}
