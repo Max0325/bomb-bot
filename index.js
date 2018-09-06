@@ -82,7 +82,10 @@ function handleText(message, replyToken, source) {
 				template: {
 					type: 'buttons',
 					text: 'Select date / time !',
-					actions: [ { type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' } ]
+					actions: [
+						{ type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' },
+						{ type: 'location', label: 'Location' }
+					]
 				}
 			});
 	}
