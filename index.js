@@ -30,6 +30,29 @@ function handleEvent(event) {
 										data: '資料 1'
 									}
 								]
+							},
+							{
+								title: '觀音拿鐵 微糖微冰',
+								text: '上次訂了2杯唷  啾咪～',
+								actions: [
+									{
+										type: 'message',
+										label: '＋1',
+										text: '+1 觀音拿鐵 微糖微冰'
+									}
+								]
+							},
+							{
+								title: 'Detail',
+								text: 'test',
+								actions: [
+									{
+										type: 'message',
+										label: '測試',
+										text:
+											'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
+									}
+								]
 							}
 						]
 					}
