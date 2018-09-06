@@ -66,7 +66,7 @@ function handleText(message, replyToken, source) {
 	switch (type) {
 		case 0:
 			break;
-		case 1:
+		case 1: //小雷
 			return client
 				.getGroupMemberProfile(source.groupId, source.userId)
 				.then((profile) =>
@@ -75,7 +75,7 @@ function handleText(message, replyToken, source) {
 						`Source: ${JSON.stringify(source)}`
 					])
 				);
-		case 3:
+		case 3: //小雷+裝炸彈
 			return client.replyMessage(replyToken, {
 				type: 'template',
 				altText: 'Datetime pickers alt text',
