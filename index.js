@@ -14,44 +14,51 @@ function handleEvent(event) {
 			return client.getGroupMemberProfile(source.groupId, source.userId).then(function(profile) {
 				return client.replyMessage(event.replyToken, {
 					type: 'template',
-					altText: 'This is a buttons template',
+					altText: 'this is a carousel template',
 					template: {
-						type: 'buttons',
-						thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
-						imageAspectRatio: 'rectangle',
-						imageSize: 'cover',
-						imageBackgroundColor: '#FFFFFF',
-						title: 'Menu',
-						text: 'Please select',
-						defaultAction: {
-							type: 'uri',
-							label: 'View detail',
-							uri: 'http://example.com/page/123'
-						},
-						actions: [
+						type: 'carousel',
+						actions: [],
+						columns: [
 							{
-								type: 'postback',
-								label: 'Buy',
-								data: 'action=buy&itemid=123'
+								title: '觀音拿鐵 半糖少冰',
+								text: '上次訂了5杯唷  啾咪～',
+								actions: [
+									{
+										type: 'postback',
+										label: '＋1',
+										text: '+1 觀音拿鐵 半糖少冰',
+										data: '資料 1'
+									}
+								]
 							},
 							{
-								type: 'postback',
-								label: 'Add to cart',
-								data: 'action=add&itemid=123'
+								title: '觀音拿鐵 微糖微冰',
+								text: '上次訂了2杯唷  啾咪～',
+								actions: [
+									{
+										type: 'message',
+										label: '＋1',
+										text: '+1 觀音拿鐵 微糖微冰'
+									}
+								]
 							},
 							{
-								type: 'uri',
-								label: 'View detail',
-								uri: 'http://example.com/page/123',
-								text:
-									'groupId:' +
-									source.groupId +
-									' 你的名字是: ' +
-									profile.displayName +
-									'，你的狀態是: ' +
-									profile.statusMessage +
-									'，你的profile是: ' +
-									JSON.stringify(profile)
+								title: 'Detail',
+								actions: [
+									{
+										type: 'message',
+										label: 'test',
+										text:
+											'groupId:' +
+											source.groupId +
+											' 你的名字是: ' +
+											profile.displayName +
+											'，你的狀態是: ' +
+											profile.statusMessage +
+											'，你的profile是: ' +
+											JSON.stringify(profile)
+									}
+								]
 							}
 						]
 					}
