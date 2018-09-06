@@ -7,36 +7,88 @@ const lineConfig = {
 const client = new line.Client(lineConfig);
 const app = express();
 
+const replyText = (token, texts) => {
+	texts = Array.isArray(texts) ? texts : [ texts ];
+	return client.replyMessage(token, texts.map((text) => ({ type: 'text', text })));
+};
+
 function handleEvent(event) {
-	switch (event.message.type) {
-		case 'text':
-			var source = event.source;
-			return client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
-				var type = typing(event.message.text);
-				console.log('type:', type);
-				if (type == 0) return;
-				if (type == 3) {
-					return client.replyMessage(event.replyToken, {
-						type: 'template',
-						altText: 'Datetime pickers alt text',
-						template: {
-							type: 'buttons',
-							text: 'Select date / time !',
-							actions: [
-								{ type: 'datetimepicker', label: 'date', data: 'DATE', mode: 'date' },
-								{ type: 'datetimepicker', label: 'time', data: 'TIME', mode: 'time' },
-								{ type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' }
-							]
-						}
-					});
-					// return client.replyMessage(event.replyToken, {
-					// 	type: 'text',
-					// 	text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
-					// });
-				}
-			});
+	switch (event.type) {
+		case 'message':
+			const message = event.message;
+			switch (message.type) {
+				case 'text':
+					return handleText(message, event.replyToken, event.source);
+				// case 'image':
+				//   return handleImage(message, event.replyToken);
+				// case 'video':
+				//   return handleVideo(message, event.replyToken);
+				// case 'audio':
+				//   return handleAudio(message, event.replyToken);
+				// case 'location':
+				//   return handleLocation(message, event.replyToken);
+				// case 'sticker':
+				//   return handleSticker(message, event.replyToken);
+				default:
+					throw new Error(`Unknown message: ${JSON.stringify(message)}`);
+			}
+
+		// case 'follow':
+		//   return replyText(event.replyToken, 'Got followed event');
+
+		// case 'unfollow':
+		//   return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+
+		// case 'join':
+		//   return replyText(event.replyToken, `Joined ${event.source.type}`);
+
+		// case 'leave':
+		//   return console.log(`Left: ${JSON.stringify(event)}`);
+
+		case 'postback':
+			let data = event.postback.data;
+			if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
+				data += `(${JSON.stringify(event.postback.params)})`;
+			}
+			return replyText(event.replyToken, `Got postback: ${data}`);
+
+		// case 'beacon':
+		//   return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
+
+		default:
+			throw new Error(`Unknown event: ${JSON.stringify(event)}`);
 	}
 }
+
+function handleText(message, replyToken, source) {
+	return client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
+		var type = typing(message.text);
+		console.log('type:', type);
+		switch (type) {
+			case 0:
+				break;
+			case 3:
+				return client.replyMessage(replyToken, {
+					type: 'template',
+					altText: 'Datetime pickers alt text',
+					template: {
+						type: 'buttons',
+						text: 'Select date / time !',
+						actions: [
+							{ type: 'datetimepicker', label: 'date', data: 'DATE', mode: 'date' },
+							{ type: 'datetimepicker', label: 'time', data: 'TIME', mode: 'time' },
+							{ type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' }
+						]
+					}
+				});
+		}
+	});
+}
+
+// return client.replyMessage(event.replyToken, {
+// 	type: 'text',
+// 	text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
+// });
 // 'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
 
 function typing(cmd) {
