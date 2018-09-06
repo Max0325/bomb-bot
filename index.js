@@ -61,24 +61,31 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken, source) {
-	return client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
-		var type = typing(message.text);
-		console.log('type:', type);
-		switch (type) {
-			case 0:
-				break;
-			case 3:
-				return client.replyMessage(replyToken, {
-					type: 'template',
-					altText: 'Datetime pickers alt text',
-					template: {
-						type: 'buttons',
-						text: 'Select date / time !',
-						actions: [ { type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' } ]
-					}
-				});
-		}
-	});
+	var type = typing(message.text);
+	console.log('type:', type);
+	switch (type) {
+		case 0:
+			break;
+		case 1:
+			return client
+				.getGroupMemberProfile(source.groupId, source.userId)
+				.then((profile) =>
+					replyText(replyToken, [
+						`Profile: ${JSON.stringify(profile)}`,
+						`Source: ${JSON.stringify(source)}`
+					])
+				);
+		case 3:
+			return client.replyMessage(replyToken, {
+				type: 'template',
+				altText: 'Datetime pickers alt text',
+				template: {
+					type: 'buttons',
+					text: 'Select date / time !',
+					actions: [ { type: 'datetimepicker', label: 'datetime', data: 'DATETIME', mode: 'datetime' } ]
+				}
+			});
+	}
 }
 
 function handleLocation(message, replyToken) {
