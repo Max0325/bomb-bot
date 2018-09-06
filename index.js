@@ -43,12 +43,12 @@ function handleEvent(event) {
 								]
 							},
 							{
-								title: 'Detail',
-								text: 'test',
+								title: '觀音拿鐵 微糖微冰',
+								text: '上次訂了2杯唷  啾咪～',
 								actions: [
 									{
 										type: 'message',
-										label: '測試',
+										label: '＋1',
 										text:
 											'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
 									}
