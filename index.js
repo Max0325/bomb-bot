@@ -44,6 +44,7 @@ function handleEvent(event) {
 							},
 							{
 								title: 'Detail',
+								text: '',
 								actions: [
 									{
 										type: 'message',
