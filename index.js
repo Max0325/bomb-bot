@@ -11,57 +11,28 @@ function handleEvent(event) {
 	switch (event.message.type) {
 		case 'text':
 			var source = event.source;
-			return client.getGroupMemberProfile(source.groupId, source.userId).then(function(profile) {
-				return client.replyMessage(event.replyToken, {
-					type: 'template',
-					altText: 'this is a carousel template',
-					template: {
-						type: 'carousel',
-						actions: [],
-						columns: [
-							{
-								title: '觀音拿鐵 半糖少冰',
-								text: '上次訂了5杯唷  啾咪～',
-								actions: [
-									{
-										type: 'postback',
-										label: '＋1',
-										text: '+1 觀音拿鐵 半糖少冰',
-										data: '資料 1'
-									}
-								]
-							},
-							{
-								title: '觀音拿鐵 微糖微冰',
-								text: '上次訂了2杯唷  啾咪～',
-								actions: [
-									{
-										type: 'message',
-										label: '＋1',
-										text: '+1 觀音拿鐵 微糖微冰'
-									}
-								]
-							},
-							{
-								title: '觀音拿鐵 微糖微冰',
-								text: '上次訂了2杯唷  啾咪～',
-								actions: [
-									{
-										type: 'message',
-										label: '＋1',
-										text: 'QQ'
-										// 'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
-									}
-								]
-							}
-						]
-					}
-				});
+			return client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
+				var type = typing(event.message.text);
+				if (type == 0) return;
+				if (type == 3) {
+					return client.replyMessage(event.replyToken, {
+						type: 'text',
+						text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
+					});
+				}
 			});
 	}
 }
+// 'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
 
-app.post('/', line.middleware(lineConfig), function(req, res) {
+function typing(cmd) {
+	var result = 0;
+	cmd.includes('小雷') && (result += Math.pow(2, 0));
+	cmd.includes('裝炸彈') && (result += Math.pow(2, 1));
+	return result;
+}
+
+app.post('/', line.middleware(lineConfig), (req, res) => {
 	Promise.all(req.body.events.map(handleEvent)).then(function(result) {
 		res.json(result);
 	});
