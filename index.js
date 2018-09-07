@@ -69,35 +69,27 @@ function handleText(message, replyToken, source) {
 		case 1: //小雷
 			return client.replyMessage(replyToken, {
 				type: 'template',
-				altText: 'This is a buttons template',
+				altText: 'Carousel alt text',
 				template: {
-					type: 'buttons',
-					thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
-					imageAspectRatio: 'rectangle',
-					imageSize: 'cover',
-					imageBackgroundColor: '#FFFFFF',
-					title: 'Menu',
-					text: 'Please select',
-					defaultAction: {
-						type: 'uri',
-						label: 'View detail',
-						uri: 'http://example.com/page/123'
-					},
-					actions: [
+					type: 'carousel',
+					columns: [
 						{
-							type: 'postback',
-							label: 'Buy',
-							data: 'action=buy&itemid=123'
+							thumbnailImageUrl: buttonsImageURL,
+							title: 'hoge',
+							text: 'fuga',
+							actions: [
+								{ label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
+								{ label: 'Say hello1', type: 'postback', data: 'hello こんにちは' }
+							]
 						},
 						{
-							type: 'postback',
-							label: 'Add to cart',
-							data: 'action=add&itemid=123'
-						},
-						{
-							type: 'uri',
-							label: 'View detail',
-							uri: 'http://example.com/page/123'
+							thumbnailImageUrl: buttonsImageURL,
+							title: 'hoge',
+							text: 'fuga',
+							actions: [
+								{ label: '言 hello2', type: 'postback', data: 'hello こんにちは', text: 'hello こんにちは' },
+								{ label: 'Say message', type: 'message', text: 'Rice=米' }
+							]
 						}
 					]
 				}
@@ -129,10 +121,6 @@ function handleText(message, replyToken, source) {
 				altText: 'This is a buttons template',
 				template: {
 					type: 'buttons',
-					thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
-					imageAspectRatio: 'rectangle',
-					imageSize: 'cover',
-					imageBackgroundColor: '#FFFFFF',
 					title: 'Menu',
 					text: 'Please select',
 					defaultAction: {
@@ -142,19 +130,14 @@ function handleText(message, replyToken, source) {
 					},
 					actions: [
 						{
-							type: 'postback',
-							label: 'Buy',
-							data: 'action=buy&itemid=123'
-						},
-						{
-							type: 'postback',
-							label: 'Add to cart',
-							data: 'action=add&itemid=123'
-						},
-						{
 							type: 'uri',
-							label: 'View detail',
+							label: '設置信用卡',
 							uri: 'http://example.com/page/123'
+						},
+						{
+							type: 'postback',
+							label: '設置信用卡',
+							data: 'action=buy&itemid=123'
 						}
 					]
 				}
@@ -191,7 +174,7 @@ function typing(cmd) {
 	cmd.includes('裝炸彈') && (result += Math.pow(2, 1)); //2
 	cmd.includes('啟動炸彈') && (result += Math.pow(2, 2)); //4
 	cmd.includes('吃大便') && (result += Math.pow(2, 3)); //8
-	cmd.includes('我要參加') && (result += Math.pow(2, 3)); //16
+	cmd.includes('我要參加') && (result += Math.pow(2, 4)); //16
 	return result;
 }
 
