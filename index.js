@@ -67,6 +67,42 @@ function handleText(message, replyToken, source) {
 		case 0:
 			break;
 		case 1: //小雷
+			return client.replyMessage(replyToken, {
+				type: 'template',
+				altText: 'This is a buttons template',
+				template: {
+					type: 'buttons',
+					thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+					imageAspectRatio: 'rectangle',
+					imageSize: 'cover',
+					imageBackgroundColor: '#FFFFFF',
+					title: 'Menu',
+					text: 'Please select',
+					defaultAction: {
+						type: 'uri',
+						label: 'View detail',
+						uri: 'http://example.com/page/123'
+					},
+					actions: [
+						{
+							type: 'postback',
+							label: 'Buy',
+							data: 'action=buy&itemid=123'
+						},
+						{
+							type: 'postback',
+							label: 'Add to cart',
+							data: 'action=add&itemid=123'
+						},
+						{
+							type: 'uri',
+							label: 'View detail',
+							uri: 'http://example.com/page/123'
+						}
+					]
+				}
+			});
+		case 9: //小雷+吃大便
 			return client
 				.getGroupMemberProfile(source.groupId, source.userId)
 				.then((profile) =>
@@ -82,9 +118,44 @@ function handleText(message, replyToken, source) {
 				template: {
 					type: 'buttons',
 					text: 'Select date / time !',
+					actions: [ { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' } ]
+				}
+			});
+		case 5: //小雷+啟動炸彈
+			return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
+		case 17: //小雷+我要參加
+			return client.replyMessage(replyToken, {
+				type: 'template',
+				altText: 'This is a buttons template',
+				template: {
+					type: 'buttons',
+					thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+					imageAspectRatio: 'rectangle',
+					imageSize: 'cover',
+					imageBackgroundColor: '#FFFFFF',
+					title: 'Menu',
+					text: 'Please select',
+					defaultAction: {
+						type: 'uri',
+						label: 'View detail',
+						uri: 'http://example.com/page/123'
+					},
 					actions: [
-						{ type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' },
-						{ type: 'location', label: 'Location' }
+						{
+							type: 'postback',
+							label: 'Buy',
+							data: 'action=buy&itemid=123'
+						},
+						{
+							type: 'postback',
+							label: 'Add to cart',
+							data: 'action=add&itemid=123'
+						},
+						{
+							type: 'uri',
+							label: 'View detail',
+							uri: 'http://example.com/page/123'
+						}
 					]
 				}
 			});
@@ -116,8 +187,11 @@ function handleLocation(message, replyToken) {
 
 function typing(cmd) {
 	var result = 0;
-	cmd.includes('小雷') && (result += Math.pow(2, 0));
-	cmd.includes('裝炸彈') && (result += Math.pow(2, 1));
+	cmd.includes('小雷') && (result += Math.pow(2, 0)); //1
+	cmd.includes('裝炸彈') && (result += Math.pow(2, 1)); //2
+	cmd.includes('啟動炸彈') && (result += Math.pow(2, 2)); //4
+	cmd.includes('吃大便') && (result += Math.pow(2, 3)); //8
+	cmd.includes('我要參加') && (result += Math.pow(2, 3)); //16
 	return result;
 }
 
