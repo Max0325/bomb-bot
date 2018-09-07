@@ -74,7 +74,6 @@ function handleText(message, replyToken, source) {
 					type: 'carousel',
 					columns: [
 						{
-							thumbnailImageUrl: buttonsImageURL,
 							title: 'hoge',
 							text: 'fuga',
 							actions: [
@@ -83,7 +82,6 @@ function handleText(message, replyToken, source) {
 							]
 						},
 						{
-							thumbnailImageUrl: buttonsImageURL,
 							title: 'hoge',
 							text: 'fuga',
 							actions: [
