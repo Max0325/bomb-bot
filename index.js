@@ -23,9 +23,10 @@ const replyText = (token, texts) => {
 };
 
 async function handleEvent(event) {
-	switch (event.type) {
+	const { type, source, replyToken, message } = event;
+	switch (type) {
 		case 'message':
-			if (event.source.type === 'group') {
+			if (source.type === 'group') {
 				const query = new Parse.Query(Group);
 				query.equalTo('groupId', source.groupId);
 				let group = await query.first();
@@ -41,33 +42,32 @@ async function handleEvent(event) {
 				// });
 			}
 
-			const message = event.message;
 			console.log(message);
 			switch (message.type) {
 				case 'text':
-					return handleText(message, event.replyToken, event.source);
+					return handleText(message, replyToken, source);
 				// case 'image':
-				//   return handleImage(message, event.replyToken);
+				//   return handleImage(message, replyToken);
 				// case 'video':
-				//   return handleVideo(message, event.replyToken);
+				//   return handleVideo(message, replyToken);
 				// case 'audio':
-				//   return handleAudio(message, event.replyToken);
+				//   return handleAudio(message, replyToken);
 				case 'location':
-					return handleLocation(message, event.replyToken);
+					return handleLocation(message, replyToken);
 				// case 'sticker':
-				//   return handleSticker(message, event.replyToken);
+				//   return handleSticker(message, replyToken);
 				default:
 					throw new Error(`Unknown message: ${JSON.stringify(message)}`);
 			}
 
 		// case 'follow':
-		//   return replyText(event.replyToken, 'Got followed event');
+		//   return replyText(replyToken, 'Got followed event');
 
 		// case 'unfollow':
 		//   return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
 		// case 'join':
-		//   return replyText(event.replyToken, `Joined ${event.source.type}`);
+		//   return replyText(replyToken, `Joined ${source.type}`);
 
 		// case 'leave':
 		//   return console.log(`Left: ${JSON.stringify(event)}`);
@@ -78,12 +78,12 @@ async function handleEvent(event) {
 				// data += `(${JSON.stringify(event.postback.params)})`;
 				const dt = moment(event.postback.params.datetime);
 				const message = { text: `小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
-				return handleText(message, event.replyToken, event.source);
+				return handleText(message, replyToken, source);
 			}
-			return replyText(event.replyToken, `Got postback: ${data}`);
+			return replyText(replyToken, `Got postback: ${data}`);
 
 		// case 'beacon':
-		//   return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
+		//   return replyText(replyToken, `Got beacon: ${event.beacon.hwid}`);
 
 		default:
 			throw new Error(`Unknown event: ${JSON.stringify(event)}`);
