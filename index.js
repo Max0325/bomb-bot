@@ -53,7 +53,10 @@ function handleEvent(event) {
 			switch (data) {
 				case 'DATETIME':
 					const dt = moment(event.postback.params.datetime);
-					handleText(`小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}`, event.replyToken, event.source);
+					const message = {
+						text: `小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}`
+					};
+					handleText(message, event.replyToken, event.source);
 					break;
 			}
 			data += `(${JSON.stringify(event.postback.params)})`;
