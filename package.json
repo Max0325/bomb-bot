@@ -3,7 +3,10 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
-	"dependencies": {},
+	"dependencies": {
+		"parse": "^2.1.0",
+		"parse-server": "^3.0.0"
+	},
 	"devDependencies": {
 		"@line/bot-sdk": "^6.2.1",
 		"express": "^4.16.3"
