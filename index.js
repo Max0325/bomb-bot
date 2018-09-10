@@ -75,15 +75,16 @@ function handleText(message, replyToken, source) {
 					type: 'carousel',
 					columns: [
 						{
-							title: 'hoge',
-							text: 'fuga',
+							title: '即時戰況',
+							text: '',
 							actions: [
-								{ label: 'Go to line.me', type: 'uri', uri: 'https://line.me' },
-								{ label: 'Say hello1', type: 'postback', data: 'hello こんにちは' }
+								{ label: '下注', type: 'uri', uri: 'https://line.me' },
+								{ label: '排行榜', type: 'uri', uri: 'https://line.me' },
+								{ label: '炸彈狀態', type: 'postback', data: 'hello こんにちは' }
 							]
 						},
 						{
-							title: '雷區',
+							title: '工具包',
 							text: '各種操作',
 							actions: [
 								{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
