@@ -4,7 +4,7 @@ const Parse = require('parse/node');
 const _ = require('lodash');
 const moment = require('moment');
 
-Parse.initialize('myAppId', '');
+Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
 
 const Group = Parse.Object.extend('Group');
