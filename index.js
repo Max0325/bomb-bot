@@ -48,9 +48,9 @@ function handleEvent(event) {
 
 		case 'postback':
 			let data = event.postback.data;
-			if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
-				data += `(${JSON.stringify(event.postback.params)})`;
-			}
+			// if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
+			// 	data += `(${JSON.stringify(event.postback.params)})`;
+			// }
 			return replyText(event.replyToken, `Got postback: ${data}`);
 
 		// case 'beacon':
@@ -83,10 +83,11 @@ function handleText(message, replyToken, source) {
 							]
 						},
 						{
-							title: 'hoge',
-							text: 'fuga',
+							title: '雷區',
+							text: '各種操作',
 							actions: [
-								{ label: '言 hello2', type: 'postback', data: 'hello こんにちは', text: 'hello こんにちは' },
+								{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
+								{ label: '拆炸彈', type: 'postback', data: 'BOMB', text: '解除炸彈' },
 								{ label: 'Say message', type: 'message', text: 'Rice=米' }
 							]
 						}
@@ -124,35 +125,35 @@ function handleText(message, replyToken, source) {
 				},
 				{ type: 'text', text: `God bless you.` }
 			]);
-		case 5: //小雷+啟動炸彈
-			return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
-		case 17: //小雷+我要參加
-			return client.replyMessage(replyToken, {
-				type: 'template',
-				altText: 'This is a buttons template',
-				template: {
-					type: 'buttons',
-					title: 'Menu',
-					text: 'Please select',
-					defaultAction: {
-						type: 'uri',
-						label: 'View detail',
-						uri: 'http://example.com/page/123'
-					},
-					actions: [
-						{
-							type: 'uri',
-							label: '設置信用卡',
-							uri: 'http://example.com/page/123'
-						},
-						{
-							type: 'postback',
-							label: '設置信用卡',
-							data: 'action=buy&itemid=123'
-						}
-					]
-				}
-			});
+		// case 5: //小雷+啟動炸彈
+		// 	return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
+		// case 17: //小雷+我要參加
+		// 	return client.replyMessage(replyToken, {
+		// 		type: 'template',
+		// 		altText: 'This is a buttons template',
+		// 		template: {
+		// 			type: 'buttons',
+		// 			title: 'Menu',
+		// 			text: 'Please select',
+		// 			defaultAction: {
+		// 				type: 'uri',
+		// 				label: 'View detail',
+		// 				uri: 'http://example.com/page/123'
+		// 			},
+		// 			actions: [
+		// 				{
+		// 					type: 'uri',
+		// 					label: '設置信用卡',
+		// 					uri: 'http://example.com/page/123'
+		// 				},
+		// 				{
+		// 					type: 'postback',
+		// 					label: '設置信用卡',
+		// 					data: 'action=buy&itemid=123'
+		// 				}
+		// 			]
+		// 		}
+		// 	});
 	}
 }
 
