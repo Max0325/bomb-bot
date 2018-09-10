@@ -1,7 +1,15 @@
 const line = require('@line/bot-sdk');
 const express = require('express');
+const Parse = require('parse/node');
 const _ = require('lodash');
 const moment = require('moment');
+
+Parse.initialize('myAppId', '');
+Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
+
+const Group = Parse.Object.extend('Group');
+const User = Parse.Object.extend('User');
+
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
 	channelSecret: process.env.HEROKU_LINE_CHANNEL_SECRET
@@ -17,6 +25,20 @@ const replyText = (token, texts) => {
 function handleEvent(event) {
 	switch (event.type) {
 		case 'message':
+			if (source.type === 'group') {
+				// const query = new Parse.Query(Group);
+				// query.equalTo("groupId", source.groupId);
+				// const results = await query.first();
+				// const group = new Group();
+				// client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
+				// 	const user = new User();
+				// 	user.set('userId', profile.userId);
+				// 	user.set('name', profile.displayName);
+				// 	user.set('imgUrl', profile.pictureUrl);
+				// 	user.save();
+				// });
+			}
+
 			const message = event.message;
 			console.log(message);
 			switch (message.type) {
@@ -100,14 +122,20 @@ function handleText(message, replyToken, source) {
 				}
 			});
 		case 9: //小雷+吃大便
-			return client
-				.getGroupMemberProfile(source.groupId, source.userId)
-				.then((profile) =>
-					replyText(replyToken, [
-						`Profile: ${JSON.stringify(profile)}`,
-						`Source: ${JSON.stringify(source)}`
-					])
-				);
+			// return client
+			// 	.getGroupMemberProfile(source.groupId, source.userId)
+			// 	.then((profile) =>
+			// 		replyText(replyToken, [
+			// 			`Profile: ${JSON.stringify(profile)}`,
+			// 			`Source: ${JSON.stringify(source)}`
+			// 		])
+			// 	);
+			return client.replyMessage(replyToken, {
+				type: 'image',
+				originalContentUrl: 'https://media1.giphy.com/media/XUFPGrX5Zis6Y/giphy.gif',
+				previewImageUrl: 'https://media1.giphy.com/media/XUFPGrX5Zis6Y/giphy.gif',
+				animated: true
+			});
 		case 3: //小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
