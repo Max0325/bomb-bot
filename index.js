@@ -27,19 +27,35 @@ async function handleEvent(event) {
 	switch (type) {
 		case 'message':
 			if (source.type === 'group') {
-				const query = new Parse.Query(Group);
-				query.equalTo('groupId', source.groupId);
+				const queryGroup = new Parse.Query(Group);
+				queryGroup.equalTo('groupId', source.groupId);
 				let group = await query.first();
-				console.log('group:', group);
-				// const group = new Group();
-				// const profile = await client.getGroupMemberProfile(source.groupId, source.userId);
-				// client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
-				// 	const user = new User();
-				// 	user.set('userId', profile.userId);
-				// 	user.set('name', profile.displayName);
-				// 	user.set('imgUrl', profile.pictureUrl);
-				// 	user.save();
-				// });
+				!group && (group = new Group());
+
+				console.log('1. group:', group);
+				const profile = await client.getGroupMemberProfile(source.groupId, source.userId);
+				console.log('2. profile:', profile);
+
+				const queryUser = new Parse.Query(User);
+				queryUser.equalTo('userId', profile.userId);
+				let user = await query.first();
+				!user && (user = new User());
+
+				console.log('3. user:', user);
+
+				user.set('userId', profile.userId);
+				user.set('name', profile.displayName);
+				user.set('imgUrl', profile.pictureUrl);
+				user.save();
+
+				console.log('4. user:', user);
+
+				const member = group.relation('member');
+				member.add(user);
+
+				group.save();
+
+				console.log('5. group:', group);
 			}
 
 			console.log(message);
