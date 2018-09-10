@@ -103,12 +103,15 @@ function handleText(message, replyToken, source) {
 				);
 		case 3: //小雷+裝炸彈
 			return client.replyMessage(replyToken, {
-				type: 'template',
-				altText: 'Datetime pickers alt text',
-				template: {
-					type: 'buttons',
-					text: 'Select date / time !',
-					actions: [ { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' } ]
+				type: 'text',
+				text: 'Select Datetime!',
+				quickReply: {
+					items: [
+						{
+							type: 'action',
+							action: { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' }
+						}
+					]
 				}
 			});
 		case 5: //小雷+啟動炸彈
@@ -154,12 +157,15 @@ function handleLocation(message, replyToken) {
 }
 
 // {
-//   type: 'text',
-//   text: 'Select your favorite food category or send me your location!',
-//   quickReply: {
-//     items: [ { type: 'action', action: { type: 'location', label: 'Send location' } } ]
-//   }
+// 	type: 'template',
+// 	altText: 'Datetime pickers alt text',
+// 	template: {
+// 		type: 'buttons',
+// 		text: 'Select date / time !',
+// 		actions: [ { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' } ]
+// 	}
 // }
+// { type: 'location', label: 'Send location' }
 // return client.replyMessage(event.replyToken, {
 // 	type: 'text',
 // 	text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
