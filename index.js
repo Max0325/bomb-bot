@@ -94,7 +94,7 @@ function handleText(message, replyToken, source) {
 							text: '各種操作',
 							actions: [
 								{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
-								{ label: '拆炸彈', type: 'postback', data: 'BOMB', text: '解除炸彈' }
+								{ label: '拆炸彈', type: 'postback', data: 'action=remove&itemid=123', text: '解除炸彈' }
 							]
 						}
 					]
