@@ -105,22 +105,25 @@ function handleText(message, replyToken, source) {
 		case 3: //小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
-			return client.replyMessage(replyToken, {
-				type: 'template',
-				altText: `炸彈已啟動~`,
-				template: {
-					type: 'buttons',
-					title: '炸彈已啟動',
-					text: `請在${cmds[1]} ${cmds[2]} 之前解除炸彈`,
-					actions: [
-						{
-							type: 'uri',
-							label: '我要參加',
-							uri: 'http://example.com/page/123'
-						}
-					]
-				}
-			});
+			return client.replyMessage(replyToken, [
+				{
+					type: 'template',
+					altText: `炸彈已啟動~`,
+					template: {
+						type: 'buttons',
+						title: '炸彈已啟動',
+						text: `請在${cmds[1]} ${cmds[2]} 之前解除炸彈`,
+						actions: [
+							{
+								type: 'uri',
+								label: '我要參加',
+								uri: 'http://example.com/page/123'
+							}
+						]
+					}
+				},
+				{ type: 'text', text: `God bless you.` }
+			]);
 		case 5: //小雷+啟動炸彈
 			return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
 		case 17: //小雷+我要參加
