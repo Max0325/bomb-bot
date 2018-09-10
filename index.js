@@ -84,7 +84,7 @@ function handleText(message, replyToken, source) {
 							text: 'ooxx',
 							actions: [
 								{ label: '下注', type: 'uri', uri: 'https://line.me' },
-								{ label: '排行榜', type: 'uri', uri: 'https://line.me' },
+								{ label: '排行榜', type: 'uri', uri: 'https://line.me' }
 							]
 						},
 						{
@@ -92,7 +92,7 @@ function handleText(message, replyToken, source) {
 							text: '各種操作',
 							actions: [
 								{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
-								{ label: '拆炸彈', type: 'postback', data: 'BOMB', text: '解除炸彈' },
+								{ label: '拆炸彈', type: 'postback', data: 'BOMB', text: '解除炸彈' }
 							]
 						}
 					]
