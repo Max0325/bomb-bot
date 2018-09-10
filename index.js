@@ -45,7 +45,6 @@ async function handleEvent(event) {
 				!user && (user = new User());
 				user.set('userId', profile.userId);
 				user.set('username', profile.displayName);
-				user.set('password', profile.userId);
 				user.set('imgUrl', profile.pictureUrl);
 				user = await user.save();
 				console.log('3. user:', user);
