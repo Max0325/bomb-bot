@@ -50,16 +50,14 @@ function handleEvent(event) {
 
 		case 'postback':
 			let data = event.postback.data;
+			data += `(${JSON.stringify(event.postback.params)})`;
+
 			switch (data) {
 				case 'DATETIME':
 					const dt = moment(event.postback.params.datetime);
-					const message = {
-						text: `小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}`
-					};
-					handleText(message, event.replyToken, event.source);
-					break;
+					const message = { text: `小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
+					return handleText(message, event.replyToken, event.source);
 			}
-			data += `(${JSON.stringify(event.postback.params)})`;
 			return replyText(event.replyToken, `Got postback: ${data}`);
 
 		// case 'beacon':
