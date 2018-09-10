@@ -47,11 +47,16 @@ function handleEvent(event) {
 		//   return console.log(`Left: ${JSON.stringify(event)}`);
 
 		case 'postback':
+			const xxx = [];
 			let data = event.postback.data;
-			// if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
-			// 	data += `(${JSON.stringify(event.postback.params)})`;
-			// }
-			return replyText(event.replyToken, `Got postback: ${data}`);
+			switch (data) {
+				case 'DATETIME':
+					xxx.push(`小雷裝炸彈 ${event.postback.params.datetime}`);
+					break;
+			}
+			data += `(${JSON.stringify(event.postback.params)})`;
+			xxx.push(`Got postback: ${data}`);
+			return replyText(event.replyToken, xxx);
 
 		// case 'beacon':
 		//   return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
