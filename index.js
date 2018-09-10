@@ -25,7 +25,7 @@ const replyText = (token, texts) => {
 function handleEvent(event) {
 	switch (event.type) {
 		case 'message':
-			if (source.type === 'group') {
+			if (event.source.type === 'group') {
 				// const query = new Parse.Query(Group);
 				// query.equalTo("groupId", source.groupId);
 				// const results = await query.first();
