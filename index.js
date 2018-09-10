@@ -45,7 +45,7 @@ async function handleEvent(event) {
 				user.set('userId', profile.userId);
 				user.set('name', profile.displayName);
 				user.set('imgUrl', profile.pictureUrl);
-				user.save();
+				user = await user.save();
 				console.log('3. user:', user);
 
 				const relation = group.relation('member');
