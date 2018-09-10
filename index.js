@@ -31,8 +31,10 @@ async function handleEvent(event) {
 				queryGroup.equalTo('groupId', source.groupId);
 				let group = await queryGroup.first();
 				!group && (group = new Group());
-
+				group.set('groupId', source.groupId);
+				group.save();
 				console.log('1. group:', group);
+
 				const profile = await client.getGroupMemberProfile(source.groupId, source.userId);
 				console.log('2. profile:', profile);
 
@@ -40,22 +42,17 @@ async function handleEvent(event) {
 				queryUser.equalTo('userId', profile.userId);
 				let user = await queryUser.first();
 				!user && (user = new User());
-
-				console.log('3. user:', user);
-
 				user.set('userId', profile.userId);
 				user.set('name', profile.displayName);
 				user.set('imgUrl', profile.pictureUrl);
 				user.save();
+				console.log('3. user:', user);
 
-				console.log('4. user:', user);
-
-				const member = group.relation('member');
-				member.add(user);
-
+				const relation = group.relation('member');
+				relation.add(user);
 				group.save();
 
-				console.log('5. group:', group);
+				console.log('4. group:', group);
 			}
 
 			console.log(message);
