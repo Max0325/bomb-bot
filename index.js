@@ -29,7 +29,7 @@ async function handleEvent(event) {
 			if (source.type === 'group') {
 				const queryGroup = new Parse.Query(Group);
 				queryGroup.equalTo('groupId', source.groupId);
-				let group = await query.first();
+				let group = await queryGroup.first();
 				!group && (group = new Group());
 
 				console.log('1. group:', group);
@@ -38,7 +38,7 @@ async function handleEvent(event) {
 
 				const queryUser = new Parse.Query(User);
 				queryUser.equalTo('userId', profile.userId);
-				let user = await query.first();
+				let user = await queryUser.first();
 				!user && (user = new User());
 
 				console.log('3. user:', user);
