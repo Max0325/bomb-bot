@@ -106,13 +106,17 @@ function handleText(message, replyToken, source) {
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
 			return client.replyMessage(replyToken, {
-				type: 'text',
-				text: 'Select Datetime!',
-				quickReply: {
-					items: [
+				type: 'template',
+				altText: `炸彈已啟動~`,
+				template: {
+					type: 'buttons',
+					title: '炸彈已啟動',
+					text: `請在${cmds[1]} ${cmds[2]} 之前解除炸彈`,
+					actions: [
 						{
-							type: 'action',
-							action: { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' }
+							type: 'uri',
+							label: '我要參加',
+							uri: 'http://example.com/page/123'
 						}
 					]
 				}
@@ -159,6 +163,18 @@ function handleLocation(message, replyToken) {
 	});
 }
 
+// {
+// 	type: 'text',
+// 	text: 'Select Datetime!',
+// 	quickReply: {
+// 		items: [
+// 			{
+// 				type: 'action',
+// 				action: { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' }
+// 			}
+// 		]
+// 	}
+// }
 // {
 // 	type: 'template',
 // 	altText: 'Datetime pickers alt text',
