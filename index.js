@@ -1,6 +1,7 @@
 const line = require('@line/bot-sdk');
 const express = require('express');
 const _ = require('lodash');
+const moment = require('moment');
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
 	channelSecret: process.env.HEROKU_LINE_CHANNEL_SECRET
@@ -51,7 +52,8 @@ function handleEvent(event) {
 			let data = event.postback.data;
 			switch (data) {
 				case 'DATETIME':
-					xxx.push(`小雷裝炸彈 ${event.postback.params.datetime}`);
+					const dt = moment(event.postback.params.datetime);
+					xxx.push(`小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}`);
 					break;
 			}
 			data += `(${JSON.stringify(event.postback.params)})`;
