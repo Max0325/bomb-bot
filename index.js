@@ -134,7 +134,7 @@ function handleText(message, replyToken, source) {
 				type: 'image',
 				originalContentUrl: 'https://media1.giphy.com/media/XUFPGrX5Zis6Y/giphy.gif',
 				previewImageUrl: 'https://media1.giphy.com/media/XUFPGrX5Zis6Y/giphy.gif',
-				animated: true
+				animated: false
 			});
 		case 3: //小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
