@@ -8,7 +8,7 @@ Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
 
 const Group = Parse.Object.extend('Group');
-const User = Parse.Object.extend('User');
+const User = Parse.Object.extend('SpeUser');
 const Bomb = Parse.Object.extend('Bomb');
 
 const lineConfig = {
