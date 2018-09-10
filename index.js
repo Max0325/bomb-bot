@@ -68,6 +68,7 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken, source) {
+	console.log('message:', message.text);
 	var type = typing(message.text);
 	console.log('type:', type);
 	switch (type) {
