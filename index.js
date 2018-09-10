@@ -81,11 +81,10 @@ function handleText(message, replyToken, source) {
 					columns: [
 						{
 							title: '即時戰況',
-							text: '',
+							text: 'ooxx',
 							actions: [
 								{ label: '下注', type: 'uri', uri: 'https://line.me' },
 								{ label: '排行榜', type: 'uri', uri: 'https://line.me' },
-								{ label: '炸彈狀態', type: 'postback', data: 'hello こんにちは' }
 							]
 						},
 						{
@@ -94,7 +93,6 @@ function handleText(message, replyToken, source) {
 							actions: [
 								{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
 								{ label: '拆炸彈', type: 'postback', data: 'BOMB', text: '解除炸彈' },
-								{ label: 'Say message', type: 'message', text: 'Rice=米' }
 							]
 						}
 					]
