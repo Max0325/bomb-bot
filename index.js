@@ -49,17 +49,15 @@ function handleEvent(event) {
 		//   return console.log(`Left: ${JSON.stringify(event)}`);
 
 		case 'postback':
-			const xxx = [];
 			let data = event.postback.data;
 			switch (data) {
 				case 'DATETIME':
 					const dt = moment(event.postback.params.datetime);
-					xxx.push(`小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}`);
+					handleText(`小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}`, event.replyToken, event.source);
 					break;
 			}
 			data += `(${JSON.stringify(event.postback.params)})`;
-			xxx.push(`Got postback: ${data}`);
-			return replyText(event.replyToken, xxx);
+			return replyText(event.replyToken, `Got postback: ${data}`);
 
 		// case 'beacon':
 		//   return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
