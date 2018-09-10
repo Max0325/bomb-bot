@@ -43,7 +43,7 @@ async function handleEvent(event) {
 				let user = await queryUser.first();
 				!user && (user = new User());
 				user.set('userId', profile.userId);
-				user.set('name', profile.displayName);
+				user.set('username', profile.displayName);
 				user.set('imgUrl', profile.pictureUrl);
 				user = await user.save();
 				console.log('3. user:', user);
