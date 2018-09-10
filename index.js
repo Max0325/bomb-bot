@@ -49,14 +49,13 @@ function handleEvent(event) {
 		//   return console.log(`Left: ${JSON.stringify(event)}`);
 
 		case 'postback':
-			let data = event.postback.data;
-			switch (data) {
-				case 'DATETIME':
-					const dt = moment(event.postback.params.datetime);
-					const message = { text: `小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
-					return handleText(message, event.replyToken, event.source);
+			const data = event.postback.data;
+			if (data === 'DATETIME') {
+				// data += `(${JSON.stringify(event.postback.params)})`;
+				const dt = moment(event.postback.params.datetime);
+				const message = { text: `小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
+				return handleText(message, event.replyToken, event.source);
 			}
-			data += `(${JSON.stringify(event.postback.params)})`;
 			return replyText(event.replyToken, `Got postback: ${data}`);
 
 		// case 'beacon':
@@ -94,7 +93,7 @@ function handleText(message, replyToken, source) {
 							text: '各種操作',
 							actions: [
 								{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
-								{ label: '拆炸彈', type: 'postback', data: 'action=remove&itemid=123', text: '解除炸彈' }
+								{ label: '拆炸彈', type: 'postback', data: 'action=remove&bombId=1234', text: '解除炸彈' }
 							]
 						}
 					]
