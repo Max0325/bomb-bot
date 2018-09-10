@@ -22,14 +22,16 @@ const replyText = (token, texts) => {
 	return client.replyMessage(token, texts.map((text) => ({ type: 'text', text })));
 };
 
-function handleEvent(event) {
+async function handleEvent(event) {
 	switch (event.type) {
 		case 'message':
 			if (event.source.type === 'group') {
-				// const query = new Parse.Query(Group);
-				// query.equalTo("groupId", source.groupId);
-				// const results = await query.first();
+				const query = new Parse.Query(Group);
+				query.equalTo('groupId', source.groupId);
+				let group = await query.first();
+				console.log('group:', group);
 				// const group = new Group();
+				// const profile = await client.getGroupMemberProfile(source.groupId, source.userId);
 				// client.getGroupMemberProfile(source.groupId, source.userId).then((profile) => {
 				// 	const user = new User();
 				// 	user.set('userId', profile.userId);
@@ -122,20 +124,14 @@ function handleText(message, replyToken, source) {
 				}
 			});
 		case 9: //小雷+吃大便
-			// return client
-			// 	.getGroupMemberProfile(source.groupId, source.userId)
-			// 	.then((profile) =>
-			// 		replyText(replyToken, [
-			// 			`Profile: ${JSON.stringify(profile)}`,
-			// 			`Source: ${JSON.stringify(source)}`
-			// 		])
-			// 	);
-			return client.replyMessage(replyToken, {
-				type: 'image',
-				originalContentUrl: 'https://media1.giphy.com/media/XUFPGrX5Zis6Y/giphy.gif',
-				previewImageUrl: 'https://media1.giphy.com/media/XUFPGrX5Zis6Y/giphy.gif',
-				animated: false
-			});
+			return client
+				.getGroupMemberProfile(source.groupId, source.userId)
+				.then((profile) =>
+					replyText(replyToken, [
+						`Profile: ${JSON.stringify(profile)}`,
+						`Source: ${JSON.stringify(source)}`
+					])
+				);
 		case 3: //小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
