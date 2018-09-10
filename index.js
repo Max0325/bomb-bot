@@ -7,7 +7,7 @@ const moment = require('moment');
 Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
 
-const Group = Parse.Object.extend('Group');
+const Group = Parse.Object.extend('SpeGroup');
 const User = Parse.Object.extend('SpeUser');
 const Bomb = Parse.Object.extend('Bomb');
 
