@@ -32,7 +32,7 @@ async function handleEvent(event) {
 				let group = await queryGroup.first();
 				!group && (group = new Group());
 				group.set('groupId', source.groupId);
-				group.save();
+				group = await group.save();
 				console.log('1. group:', group);
 
 				const profile = await client.getGroupMemberProfile(source.groupId, source.userId);
