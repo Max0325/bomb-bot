@@ -1,5 +1,6 @@
 const line = require('@line/bot-sdk');
 const express = require('express');
+const _ = require('lodash');
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
 	channelSecret: process.env.HEROKU_LINE_CHANNEL_SECRET
@@ -102,6 +103,8 @@ function handleText(message, replyToken, source) {
 					])
 				);
 		case 3: //小雷+裝炸彈
+			const cmds = _.split(message.text, ' ');
+			console.log(cmds);
 			return client.replyMessage(replyToken, {
 				type: 'text',
 				text: 'Select Datetime!',
