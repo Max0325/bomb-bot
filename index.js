@@ -31,11 +31,11 @@ async function handleEvent(event) {
 
 	switch (type) {
 		case 'message':
-			const data = await catchProfile(source, replyToken);
+			const info = await catchProfile(source, replyToken);
 
 			switch (message.type) {
 				case 'text':
-					return handleText(data, message, replyToken, source);
+					return handleText(info, message, replyToken, source);
 				// case 'image':
 				//   return handleImage(message, replyToken);
 				// case 'video':
@@ -78,8 +78,8 @@ async function handleEvent(event) {
 	}
 }
 
-async function handleText(data, message, replyToken, source) {
-	const { channel, user } = data;
+async function handleText(info, message, replyToken, source) {
+	const { channel, user } = info;
 	const type = typing(message.text);
 
 	switch (type) {
