@@ -188,7 +188,7 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 		channel.set('replyToken', replyToken);
 		channel = await channel.save();
 
-		console.log('Register Channel:', beautify(channel.toJSON(), null, 2, 80));
+		console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
 	}
 }
 
