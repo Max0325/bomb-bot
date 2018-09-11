@@ -7,7 +7,7 @@ const moment = require('moment');
 Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
 
-const Group = Parse.Object.extend('SpeGroup');
+const Channel = Parse.Object.extend('Channel');
 const User = Parse.Object.extend('SpeUser');
 const Bomb = Parse.Object.extend('Bomb');
 
@@ -24,11 +24,14 @@ const replyText = (token, texts) => {
 };
 
 function handleEvent(event) {
-	const { type, source, replyToken, message } = event;
 	console.log(event);
+
+	const { type, source, replyToken, message } = event;
+
+	catchProfile(source, replyToken);
+
 	switch (type) {
 		case 'message':
-			catchProfile(source, replyToken);
 			switch (message.type) {
 				case 'text':
 					return handleText(message, replyToken, source);
@@ -53,6 +56,7 @@ function handleEvent(event) {
 			return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
 		case 'join':
+			registerChannel(source, replyToken);
 			return replyText(replyToken, `Joined ${source.type}`);
 
 		case 'leave':
@@ -156,14 +160,15 @@ function handleLocation(message, replyToken) {
 	});
 }
 
-async function catchProfile({ type, userId, groupId }, replyToken) {
+async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 	const queryUser = new Parse.Query(User);
-	const queryGroup = new Parse.Query(Group);
+	const queryChannel = new Parse.Query(Channel);
 	const profile = await client.getProfile(userId);
 
-	console.log('1. profile:', profile);
+	console.log('Profile:', profile);
 
 	queryUser.equalTo('userId', profile.userId);
+
 	let user = await queryUser.first();
 	{
 		!user && (user = new User());
@@ -172,24 +177,35 @@ async function catchProfile({ type, userId, groupId }, replyToken) {
 		user.set('imgUrl', profile.pictureUrl);
 		user = await user.save();
 	}
-	console.log('2. user:', user.toJSON());
+	console.log('User:', user.toJSON());
 
-	if (type === 'group') {
-		queryGroup.equalTo('groupId', groupId);
-		let group = await queryGroup.first();
-		{
-			!group && (group = new Group());
-			group.set('groupId', groupId);
-			group.set('replyToken', replyToken);
-			group = await group.save();
-		}
+	const channel = await queryChannel.equalTo('id', userId || roomId || groupId).first();
 
-		const relation = group.relation('member');
+	if (channel) {
+		const relation = channel.relation('member');
+
 		relation.add(user);
-		group.save();
+		channel.set('replyToken', replyToken);
+		channel = await channel.save();
 
-		console.log('3. group:', group.toJSON());
+		console.log('Register Channel:', channel.toJSON());
 	}
+}
+
+async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
+	const queryChannel = new Parse.Query(Channel);
+	const id = userId || roomId || groupId;
+
+	let channel = await queryChannel.equalTo('id', id).first();
+	{
+		!channel && (channel = new Channel());
+		channel.set('type', type);
+		channel.set('id', id);
+		channel.set('replyToken', replyToken);
+		channel = await channel.save();
+	}
+
+	console.log('Register Channel:', channel.toJSON());
 }
 
 // case 5: //小雷+啟動炸彈
