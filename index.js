@@ -7,8 +7,8 @@ const moment = require('moment');
 Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
 
-const Channel = Parse.Object.extend('SpeChannel');
-const User = Parse.Object.extend('SpeUser');
+const Channel = Parse.Object.extend('Channel');
+const User = Parse.Object.extend('BotUser');
 const Bomb = Parse.Object.extend('Bomb');
 
 const lineConfig = {
