@@ -104,8 +104,8 @@ async function handleText(info, message, replyToken, source) {
 					{ label: '下注', type: 'uri', uri: 'https://line.me' },
 					{ label: '排行榜', type: 'uri', uri: 'https://line.me' }
 				];
-				// state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
-				// state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷 我要參加' });
+				state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
+				state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
 				const text = `發起人：${owner}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
 				columns.push({ title: '即時戰況', text, actions });
 			}
