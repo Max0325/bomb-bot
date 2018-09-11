@@ -8,7 +8,7 @@ Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
 
 const Channel = Parse.Object.extend('Channel');
-const User = Parse.Object.extend('BotUser');
+const User = Parse.Object.extend('SpeUser');
 const Bomb = Parse.Object.extend('Bomb');
 
 const lineConfig = {
@@ -196,15 +196,14 @@ async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 	// const queryChannel = new Parse.Query(Channel);
 	const id = userId || roomId || groupId;
 
-	console.log('1. id:', id);
-
 	let channel = new Channel();
 	{
-		console.log('channel:', channel, type, id, replyToken);
 		channel.set('type', type);
 		channel.set('id', id);
 		channel.set('replyToken', replyToken);
+		console.log('1. channel:', channel, type, id, replyToken);
 		channel = await channel.save();
+		console.log('2. channel:', channel, type, id, replyToken);
 	}
 
 	console.log('Register Channel:', channel);
