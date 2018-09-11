@@ -139,7 +139,7 @@ function handleText(message, replyToken, source) {
 			});
 		case 9: //小雷+吃大便
 			return client
-				.getGroupMemberProfile(source.groupId, source.userId)
+				.getProfile(source.userId)
 				.then((profile) =>
 					replyText(replyToken, [
 						`Profile: ${JSON.stringify(profile)}`,
