@@ -162,7 +162,7 @@ function handleLocation(message, replyToken) {
 }
 
 async function catchProfile({ userId, roomId, groupId }, replyToken) {
-	const key = userId || roomId || groupId;
+	const key = roomId || groupId;
 	const queryUser = new Parse.Query(User);
 	const queryChannel = new Parse.Query(Channel);
 
@@ -193,7 +193,7 @@ async function catchProfile({ userId, roomId, groupId }, replyToken) {
 }
 
 async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
-	const key = userId || roomId || groupId;
+	const key = roomId || groupId;
 
 	let channel = new Channel();
 
