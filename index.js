@@ -102,7 +102,7 @@ async function handleText(info, message, replyToken, source) {
 				const timestamp = bomb.get('timestamp');
 				const actions = [
 					{ label: '下注', type: 'uri', uri: 'https://line.me' },
-					{ label: '排行榜', type: 'uri', uri: 'https://line.me' }
+					// { label: '排行榜', type: 'uri', uri: 'https://line.me' }
 				];
 				state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
 				state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
@@ -117,10 +117,10 @@ async function handleText(info, message, replyToken, source) {
 					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
 				]
 			});
-			console.log('@@:', beautify(columns, null, 2, 80));
+			console.log(beautify(columns, null, 2, 80));
 			return client.replyMessage(replyToken, {
 				type: 'template',
-				altText: 'Carousel alt text',
+				altText: '小雷Menu',
 				template: { type: 'carousel', columns }
 			});
 		}
