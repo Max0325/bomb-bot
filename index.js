@@ -28,7 +28,7 @@ function handleEvent(event) {
 	console.log(event);
 	switch (type) {
 		case 'message':
-			catchProfile(source);
+			catchProfile(source, replyToken);
 			console.log(message);
 			switch (message.type) {
 				case 'text':
@@ -159,7 +159,7 @@ function handleLocation(message, replyToken) {
 	});
 }
 
-async function catchProfile({ type, userId, groupId }) {
+async function catchProfile({ type, userId, groupId }, replyToken) {
 	const queryUser = new Parse.Query(User);
 	const queryGroup = new Parse.Query(Group);
 	const profile = await client.getProfile(userId);
@@ -183,6 +183,7 @@ async function catchProfile({ type, userId, groupId }) {
 		{
 			!group && (group = new Group());
 			group.set('groupId', groupId);
+			group.set('replyToken', replyToken);
 			group = await group.save();
 		}
 
