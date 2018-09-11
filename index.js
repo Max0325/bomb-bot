@@ -67,7 +67,7 @@ async function handleEvent(event) {
 
 			if (data === 'DATETIME') {
 				const dt = moment(event.postback.params.datetime);
-				const message = { text: `Postback:小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
+				const message = { text: `Postback:小雷裝炸彈 ${dt.format('YYYY-MM-DD HH:mm')}` };
 				return handleText(info, message, replyToken, source);
 			}
 			return replyText(replyToken, `Got postback: ${data}`);
@@ -119,7 +119,7 @@ async function handleText(info, message, replyToken, source) {
 			if (cmds.length < 3) {
 				return client.replyMessage(event.replyToken, {
 					type: 'text',
-					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018/10/04 10:30'
+					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30'
 				});
 			}
 			const bomb = new Bomb();
