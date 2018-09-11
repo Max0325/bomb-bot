@@ -168,9 +168,7 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 
 	console.log('Profile:', beautify(profile, null, 2, 80));
 
-	queryUser.equalTo('userId', profile.userId);
-
-	let user = await queryUser.first();
+	let user = await queryUser.equalTo('userId', profile.userId).first();
 	{
 		!user && (user = new User());
 		user = await user.save(profile);
