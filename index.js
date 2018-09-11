@@ -179,7 +179,7 @@ async function catchProfile({ userId, roomId, groupId }, replyToken) {
 
 	let channel = await queryChannel.equalTo('key', key).first();
 
-	console.log('Query Channel:', channel);
+	console.log('Query Channel:', channel, key);
 
 	if (channel) {
 		const relation = channel.relation('member');
