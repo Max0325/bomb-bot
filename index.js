@@ -193,13 +193,14 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 }
 
 async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
-	const queryChannel = new Parse.Query(Channel);
+	// const queryChannel = new Parse.Query(Channel);
 	const id = userId || roomId || groupId;
-	
+
 	console.log('1. id:', id);
 
 	const channel = new Channel();
 	{
+		console.log('channel:', channel);
 		channel.set('type', type);
 		channel.set('id', id);
 		channel.set('replyToken', replyToken);
