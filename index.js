@@ -125,7 +125,7 @@ async function handleText(message, replyToken, source) {
 						text: `${cmds[1]} ${cmds[2]} 隨機告⽩白`,
 						actions: [
 							{ type: 'uri', label: '修改炸彈規則', uri: 'http://example.com/page/123' },
-							{ type: 'uri', label: '啟動炸彈', text: '小雷啟動炸彈' }
+							{ type: 'text', label: '啟動炸彈', text: '小雷啟動炸彈' }
 						]
 					}
 				},
