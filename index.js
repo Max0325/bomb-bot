@@ -195,11 +195,11 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 	const queryChannel = new Parse.Query(Channel);
 	const id = userId || roomId || groupId;
+	
 	console.log('1. id:', id);
-	let channel = await queryChannel.equalTo('id', id).first();
+
+	const channel = new Channel();
 	{
-		console.log('Register Channel:', channel.toJSON());
-		!channel && (channel = new Channel());
 		channel.set('type', type);
 		channel.set('id', id);
 		channel.set('replyToken', replyToken);
