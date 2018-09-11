@@ -115,7 +115,8 @@ async function handleText(info, message, replyToken, source) {
 				text: '各種操作',
 				actions: [
 					{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
-					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
+					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' },
+					{ label: '吃大便', type: 'message', text: '吃大便' }
 				]
 			});
 			console.log(beautify(columns, null, 2, 80));
