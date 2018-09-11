@@ -29,7 +29,6 @@ function handleEvent(event) {
 	switch (type) {
 		case 'message':
 			catchProfile(source, replyToken);
-			console.log(message);
 			switch (message.type) {
 				case 'text':
 					return handleText(message, replyToken, source);
@@ -75,9 +74,7 @@ function handleEvent(event) {
 }
 
 async function handleText(message, replyToken, source) {
-	console.log('message:', message.text);
-	var type = typing(message.text);
-	console.log('type:', type);
+	const type = typing(message.text);
 	switch (type) {
 		case 0:
 			break;
