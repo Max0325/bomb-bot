@@ -96,6 +96,7 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.includeAll();
 			}
 			const bomb = await queryBomb.first();
+			console.log('@@:', bomb);
 			if (bomb) {
 				const owner = bomb.get('owner').get('displayName');
 				const state = bomb.get('state');
