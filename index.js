@@ -7,7 +7,7 @@ const moment = require('moment');
 Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
 
-const Group = Parse.Object.extend('SpeGroup');
+const Channel = Parse.Object.extend('Channel');
 const User = Parse.Object.extend('SpeUser');
 const Bomb = Parse.Object.extend('Bomb');
 
@@ -162,7 +162,7 @@ function handleLocation(message, replyToken) {
 
 async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 	const queryUser = new Parse.Query(User);
-	const queryChannel = new Parse.Query(Group);
+	const queryChannel = new Parse.Query(Channel);
 	const profile = await client.getProfile(userId);
 
 	console.log('Profile:', profile);
@@ -171,11 +171,9 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 
 	let user = await queryUser.first();
 	{
+		const { userId, displayName, pictureUrl } = profile;
 		!user && (user = new User());
-		user.set('userId', profile.userId);
-		user.set('username', profile.displayName);
-		user.set('imgUrl', profile.pictureUrl);
-		user = await user.save();
+		user = await user.save({ userId, displayName, pictureUrl });
 	}
 	console.log('User:', user.toJSON());
 
@@ -194,13 +192,12 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 
 async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 	// const queryChannel = new Parse.Query(Channel);
-	const id = userId || roomId || groupId;
+	const key = userId || roomId || groupId;
 
-	const Channel = Parse.Object.extend('Group');
 	const channel = new Channel();
 	{
-		console.log('1. channel:', channel.toJSON(), type, id, replyToken);
-		const result = await channel.save({ type, id, replyToken });
+		console.log('1. channel:', channel.toJSON(), type, key, replyToken);
+		const result = await channel.save({ type, key, replyToken });
 		console.log('2. result:', result.toJSON());
 	}
 }
