@@ -136,6 +136,14 @@ async function handleText(info, message, replyToken, source) {
 					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30'
 				});
 			}
+			const queryBomb = new Parse.Query(Bomb);
+			{
+				queryBomb.equalTo('channel', channel);
+				queryBomb.containedIn('state', [ 'INIT', 'STARTED' ]);
+				queryBomb.descending('createdAt');
+			}
+			const bomb = await queryBomb.first();
+			bomb && (await bomb.save({ state: 'INVALID' }));
 			await new Bomb().save({
 				timestamp: +moment(_.drop(cmds).join('T')),
 				owner: user,
