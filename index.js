@@ -111,10 +111,7 @@ async function handleText(message, replyToken, source) {
 			});
 		case 9: //小雷+吃大便
 			const profile = await client.getProfile(source.userId);
-			return replyText(replyToken, [
-				`Profile: ${JSON.stringify(profile)}`,
-				`Source: ${JSON.stringify(source)}`
-			]);
+			return replyText(replyToken, [ `${beautify(profile, null, 2, 80)}`, `${beautify(source, null, 2, 80)}` ]);
 		case 3: //小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
@@ -192,7 +189,9 @@ async function catchProfile({ userId, roomId, groupId }, replyToken) {
 	}
 }
 
-async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
+async function registerChannel({ type, roomId, groupId }, replyToken) {
+	if (type === 'user') return;
+
 	const key = roomId || groupId;
 
 	let channel = new Channel();
