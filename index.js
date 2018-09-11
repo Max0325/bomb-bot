@@ -93,8 +93,9 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.equalTo('channel', channel);
 				queryBomb.containedIn('state', [ 'INIT', 'STARTED' ]);
 				queryBomb.descending('createdAt');
+				queryBomb.includeAll();
 			}
-			const bomb = await queryBomb.first().fetch();
+			const bomb = await queryBomb.first();
 			if (bomb) {
 				const owner = bomb.get('owner').get('displayName');
 				const state = bomb.get('state');
@@ -169,8 +170,9 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.equalTo('channel', channel);
 				queryBomb.equalTo('state', 'INIT');
 				queryBomb.descending('createdAt');
+				queryBomb.includeAll();
 			}
-			const bomb = await queryBomb.first().fetch();
+			const bomb = await queryBomb.first();
 			const owner = bomb.get('owner');
 			const ownerName = owner.get('displayName');
 			const state = bomb.get('state');
