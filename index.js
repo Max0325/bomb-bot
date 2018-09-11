@@ -162,7 +162,7 @@ function handleLocation(message, replyToken) {
 
 async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 	const queryUser = new Parse.Query(User);
-	const queryChannel = new Parse.Query(Channel);
+	const queryChannel = new Parse.Query(Group);
 	const profile = await client.getProfile(userId);
 
 	console.log('Profile:', profile);
