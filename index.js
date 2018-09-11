@@ -158,6 +158,7 @@ async function handleText(info, message, replyToken, source) {
 			{
 				queryBomb.equalTo('channel', channel);
 				queryBomb.equalTo('isValid', false);
+				queryBomb.descending('createdAt');
 			}
 			const bomb = await queryBomb.first();
 			console.log('queryBomb:', beautify(bomb.toJSON(), null, 2, 80));
