@@ -204,10 +204,10 @@ async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 		channel.set('type', type);
 		channel.set('id', id);
 		channel.set('replyToken', replyToken);
-		channel = await channel.save();
+		channel.save();
 	}
 
-	console.log('Register Channel:', channel.toJSON());
+	console.log('Register Channel:', channel);
 }
 
 // case 5: //小雷+啟動炸彈
