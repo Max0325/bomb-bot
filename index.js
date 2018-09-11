@@ -128,13 +128,12 @@ async function handleText(info, message, replyToken, source) {
 					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30'
 				});
 			}
-			const bomb = await new Bomb().save({
+			await new Bomb().save({
 				timestamp: +moment(_.drop(cmds).join('T')),
 				owner: user,
 				channel,
-				isValid: false
+				state: 'INIT'
 			});
-			console.log('bomb:', beautify(bomb.toJSON(), null, 2, 80));
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -157,11 +156,15 @@ async function handleText(info, message, replyToken, source) {
 			const queryBomb = new Parse.Query(Bomb);
 			{
 				queryBomb.equalTo('channel', channel);
-				queryBomb.equalTo('isValid', false);
+				queryBomb.equalTo('state', 'INIT');
 				queryBomb.descending('createdAt');
 			}
 			const bomb = await queryBomb.first();
-			console.log('queryBomb:', beautify(bomb.toJSON(), null, 2, 80));
+			const bombOwner = bomb.get('owner');
+			if (!user.equals(bombOwner)) {
+				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${bombOwner.get('displayName')} 啟動個屁啊！！` ]);
+			}
+			await bomb.save({ state: 'STARTED' });
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -172,9 +175,7 @@ async function handleText(info, message, replyToken, source) {
 						text: `有種就選最難的`,
 						actions: [ { type: 'uri', label: '參加炸彈挑戰', uri: 'http://example.com/page/123' } ]
 					}
-				},
-				{ type: 'text', text: `Rex：三小啦` },
-				{ type: 'text', text: beautify(bomb.toJSON(), null, 2, 80) }
+				}
 			]);
 		}
 	}
