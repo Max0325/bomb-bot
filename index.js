@@ -120,7 +120,7 @@ async function handleText(info, message, replyToken, source) {
 					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
 				]
 			});
-			console.log('@@:', columns);
+			console.log('@@:', beautify(columns, null, 2, 80));
 			return client.replyMessage(replyToken, {
 				type: 'template',
 				altText: 'Carousel alt text',
