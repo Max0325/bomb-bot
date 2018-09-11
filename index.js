@@ -124,7 +124,7 @@ async function handleText(info, message, replyToken, source) {
 			}
 			const bomb = new Bomb();
 			bomb.save({
-				datetime: moment(_.drop(cmds).join('T')).toString(),
+				timestamp: +moment(_.drop(cmds).join(' ')),
 				owner: user,
 				channel: channel
 			});
