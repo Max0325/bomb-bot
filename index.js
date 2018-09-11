@@ -118,10 +118,10 @@ async function handleText(message, replyToken, source) {
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
-					altText: '炸彈來來囉 (ง๑ •̀_•́)ง',
+					altText: '炸彈來來囉',
 					template: {
 						type: 'buttons',
-						title: '炸彈來來囉 (ง๑ •̀_•́)ง',
+						title: '炸彈來來囉',
 						text: `${cmds[1]} ${cmds[2]} 隨機告⽩白`,
 						actions: [
 							{ type: 'uri', label: '修改炸彈規則', uri: 'http://example.com/page/123' },
