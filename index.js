@@ -4,6 +4,7 @@ const Parse = require('parse/node');
 const _ = require('lodash');
 const moment = require('moment');
 const beautify = require('json-beautify');
+const schedule = require('node-schedule');
 
 Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
@@ -123,11 +124,7 @@ async function handleText(info, message, replyToken, source) {
 				});
 			}
 			const bomb = new Bomb();
-			bomb.save({
-				timestamp: +moment(_.drop(cmds).join('T')),
-				owner: user,
-				channel: channel
-			});
+			await bomb.save({ timestamp: +moment(_.drop(cmds).join('T')), owner: user, channel, isValid: false });
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -145,6 +142,9 @@ async function handleText(info, message, replyToken, source) {
 				{ type: 'text', text: `God bless you.` }
 			]);
 		case 5: //小雷+啟動炸彈
+			const queryBomb = new Parse.Query(Bomb);
+			const bomb = await queryBomb.equalTo('channel', channel).last();
+			console.log('queryBomb:', beautify(bomb.toJSON(), null, 2, 80));
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -156,7 +156,8 @@ async function handleText(info, message, replyToken, source) {
 						actions: [ { type: 'uri', label: '參加炸彈挑戰', uri: 'http://example.com/page/123' } ]
 					}
 				},
-				{ type: 'text', text: `Rex：三小啦` }
+				{ type: 'text', text: `Rex：三小啦` },
+				{ type: 'text', text: beautify(bomb.toJSON(), null, 2, 80) }
 			]);
 	}
 }
