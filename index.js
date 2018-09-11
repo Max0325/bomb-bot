@@ -96,8 +96,6 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.includeAll();
 			}
 			const bomb = await queryBomb.first();
-			console.log('@@:', bomb);
-			console.log('@@:', bomb.get('owner'));
 			if (bomb) {
 				const owner = bomb.get('owner').get('displayName');
 				const state = bomb.get('state');
@@ -106,9 +104,8 @@ async function handleText(info, message, replyToken, source) {
 					{ label: '下注', type: 'uri', uri: 'https://line.me' },
 					{ label: '排行榜', type: 'uri', uri: 'https://line.me' }
 				];
-				console.log('@@:', owner);
-				state === 'INIT' && actions.push({ type: 'message', label: '啟動炸彈', text: '小雷啟動炸彈' });
-				state === 'STARTED' && actions.push({ type: 'message', label: '我要參加', text: '小雷 我要參加' });
+				// state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
+				// state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷 我要參加' });
 				const text = `發起人：${owner}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
 				columns.push({ title: '即時戰況', text, actions });
 			}
