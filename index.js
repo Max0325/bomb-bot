@@ -163,7 +163,7 @@ async function handleText(info, message, replyToken, source) {
 			const bombOwner = await bomb.get('owner').fetch();
 			console.log(bombOwner);
 			console.log(bombOwner.toJSON());
-			if (bomb.get('state') === 'STARD') {
+			if (bomb.get('state') === 'STARTED') {
 				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
 			}
 			if (!user.equals(bombOwner)) {
