@@ -28,10 +28,10 @@ function handleEvent(event) {
 
 	const { type, source, replyToken, message } = event;
 
-	// catchProfile(source, replyToken);
-
 	switch (type) {
 		case 'message':
+			catchProfile(source, replyToken);
+
 			switch (message.type) {
 				case 'text':
 					return handleText(message, replyToken, source);
