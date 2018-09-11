@@ -160,7 +160,7 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.descending('createdAt');
 			}
 			const bomb = await queryBomb.first();
-			const bombOwner = await bomb.get('owner');
+			const bombOwner = await bomb.get('owner').fetch();
 			console.log(bombOwner);
 			console.log(bombOwner.toJSON());
 			if (bomb.get('state') === 'STARD') {
