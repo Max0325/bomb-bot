@@ -161,6 +161,9 @@ async function handleText(info, message, replyToken, source) {
 			}
 			const bomb = await queryBomb.first();
 			const bombOwner = bomb.get('owner');
+			if (bomb.get('state') === 'STARD') {
+				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
+			}
 			if (!user.equals(bombOwner)) {
 				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${bombOwner.get('displayName')} 啟動個屁啊！！` ]);
 			}
