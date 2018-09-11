@@ -25,7 +25,7 @@ const replyText = (token, texts) => {
 };
 
 function handleEvent(event) {
-	console.log(beautify(event, null, 2, 1000));
+	console.log(beautify(event, null, 2, 80));
 
 	const { type, source, replyToken, message } = event;
 
@@ -166,7 +166,7 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 	const queryChannel = new Parse.Query(Channel);
 	const profile = await client.getProfile(userId);
 
-	console.log('Profile:', beautify(profile, null, 2, 1000));
+	console.log('Profile:', beautify(profile, null, 2, 80));
 
 	queryUser.equalTo('userId', profile.userId);
 
@@ -175,7 +175,7 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 		!user && (user = new User());
 		user = await user.save(profile);
 	}
-	console.log('User:', beautify(user, null, 2, 1000));
+	console.log('User:', beautify(user, null, 2, 80));
 
 	let channel = await queryChannel.equalTo('id', userId || roomId || groupId).first();
 
@@ -188,7 +188,7 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 		channel.set('replyToken', replyToken);
 		channel = await channel.save();
 
-		console.log('Register Channel:', beautify(channel.toJSON(), null, 2, 1000));
+		console.log('Register Channel:', beautify(channel.toJSON(), null, 2, 80));
 	}
 }
 
