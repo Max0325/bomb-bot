@@ -198,6 +198,7 @@ async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 	console.log('1. id:', id);
 	let channel = await queryChannel.equalTo('id', id).first();
 	{
+		console.log('Register Channel:', channel.toJSON());
 		!channel && (channel = new Channel());
 		channel.set('type', type);
 		channel.set('id', id);
