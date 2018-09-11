@@ -128,8 +128,13 @@ async function handleText(info, message, replyToken, source) {
 					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30'
 				});
 			}
-			const bomb = new Bomb();
-			await bomb.save({ timestamp: +moment(_.drop(cmds).join('T')), owner: user, channel, isValid: false });
+			const bomb = await new Bomb().save({
+				timestamp: +moment(_.drop(cmds).join('T')),
+				owner: user,
+				channel,
+				isValid: false
+			});
+			console.log('bomb:', beautify(bomb.toJSON(), null, 2, 80));
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -223,9 +228,7 @@ async function registerChannel(source, replyToken) {
 
 	const key = roomId || groupId;
 
-	let channel = new Channel();
-
-	channel = await channel.save({ type, key, replyToken });
+	await new Channel().save({ type, key, replyToken });
 }
 
 // case 5: //小雷+啟動炸彈
