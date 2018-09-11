@@ -104,7 +104,7 @@ async function handleText(info, message, replyToken, source) {
 				state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
 				state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
 				const text = `發起人：${owner}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
-				columns.push({ title: '即時戰況', text, actions });
+				columns.push({ title: '炸彈狀態', text, actions });
 			}
 			columns.push({
 				title: '工具包',
