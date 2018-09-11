@@ -196,6 +196,7 @@ async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 	// const queryChannel = new Parse.Query(Channel);
 	const id = userId || roomId || groupId;
 
+	const Channel = Parse.Object.extend('Channel');
 	const channel = new Channel();
 	{
 		console.log('1. channel:', channel.toJSON(), type, id, replyToken);
