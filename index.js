@@ -177,7 +177,9 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 	}
 	console.log('User:', beautify(user, null, 2, 80));
 
-	let channel = await queryChannel.equalTo('id', userId || roomId || groupId).first();
+	const key = userId || roomId || groupId;
+
+	let channel = await queryChannel.equalTo('key', key).first();
 
 	console.log('Query Channel:', channel);
 
