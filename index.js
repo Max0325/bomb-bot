@@ -85,7 +85,8 @@ async function handleText(info, message, replyToken, source) {
 	switch (type) {
 		case 0:
 			break;
-		case 1: { //小雷
+		case 1: {
+			//小雷
 			return client.replyMessage(replyToken, {
 				type: 'template',
 				altText: 'Carousel alt text',
@@ -112,11 +113,13 @@ async function handleText(info, message, replyToken, source) {
 				}
 			});
 		}
-		case 9: { //小雷+吃大便
+		case 9: {
+			//小雷+吃大便
 			const profile = await client.getProfile(source.userId);
 			return replyText(replyToken, [ `${beautify(profile, null, 2, 25)}`, `${beautify(source, null, 2, 25)}` ]);
 		}
-		case 3: { //小雷+裝炸彈
+		case 3: {
+			//小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
 			if (cmds.length < 3) {
@@ -144,9 +147,14 @@ async function handleText(info, message, replyToken, source) {
 				{ type: 'text', text: `God bless you.` }
 			]);
 		}
-		case 5: { //小雷+啟動炸彈
+		case 5: {
+			//小雷+啟動炸彈
 			const queryBomb = new Parse.Query(Bomb);
-			const bomb = await queryBomb.equalTo('channel', channel).last();
+			{
+				queryBomb.equalTo('channel', channel);
+				queryBomb.equalTo('isValid', false);
+			}
+			const bomb = await queryBomb.first();
 			console.log('queryBomb:', beautify(bomb.toJSON(), null, 2, 80));
 			return client.replyMessage(replyToken, [
 				{
