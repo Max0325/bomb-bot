@@ -25,14 +25,13 @@ const replyText = (token, texts) => {
 };
 
 async function handleEvent(event) {
-	console.log(beautify(event, null, 2, 80));
+	// console.log(beautify(event, null, 2, 80));
 
 	const { type, source, replyToken, message } = event;
+	const info = await catchProfile(source, replyToken);
 
 	switch (type) {
 		case 'message':
-			const info = await catchProfile(source, replyToken);
-
 			switch (message.type) {
 				case 'text':
 					return handleText(info, message, replyToken, source);
@@ -65,11 +64,11 @@ async function handleEvent(event) {
 
 		case 'postback':
 			const data = event.postback.data;
+
 			if (data === 'DATETIME') {
-				// data += `(${JSON.stringify(event.postback.params)})`;
 				const dt = moment(event.postback.params.datetime);
 				const message = { text: `Postback:小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
-				return handleText(message, replyToken, source);
+				return handleText(info, message, replyToken, source);
 			}
 			return replyText(replyToken, `Got postback: ${data}`);
 
