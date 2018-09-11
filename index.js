@@ -25,6 +25,7 @@ const replyText = (token, texts) => {
 
 function handleEvent(event) {
 	const { type, source, replyToken, message } = event;
+	console.log(event);
 	switch (type) {
 		case 'message':
 			catchProfile(source);
