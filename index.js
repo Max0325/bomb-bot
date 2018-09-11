@@ -28,7 +28,6 @@ function handleEvent(event) {
 	switch (type) {
 		case 'message':
 			catchProfile(source);
-
 			console.log(message);
 			switch (message.type) {
 				case 'text':
@@ -64,7 +63,7 @@ function handleEvent(event) {
 			if (data === 'DATETIME') {
 				// data += `(${JSON.stringify(event.postback.params)})`;
 				const dt = moment(event.postback.params.datetime);
-				const message = { text: `小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
+				const message = { text: `Postback:小雷裝炸彈 ${dt.format('YYYY/MM/DD HH:mm')}` };
 				return handleText(message, replyToken, source);
 			}
 			return replyText(replyToken, `Got postback: ${data}`);
@@ -119,7 +118,7 @@ async function handleText(message, replyToken, source) {
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
-					altText: `炸彈來來囉 (ง๑ •̀_•́)ง`,
+					altText: '炸彈來來囉 (ง๑ •̀_•́)ง',
 					template: {
 						type: 'buttons',
 						title: '炸彈來來囉 (ง๑ •̀_•́)ง',
