@@ -23,38 +23,11 @@ const replyText = (token, texts) => {
 	return client.replyMessage(token, texts.map((text) => ({ type: 'text', text })));
 };
 
-async function handleEvent(event) {
+function handleEvent(event) {
 	const { type, source, replyToken, message } = event;
 	switch (type) {
 		case 'message':
-			if (source.type === 'group') {
-				const queryGroup = new Parse.Query(Group);
-				queryGroup.equalTo('groupId', source.groupId);
-				let group = await queryGroup.first();
-				!group && (group = new Group());
-				group.set('groupId', source.groupId);
-				group = await group.save();
-				console.log('1. group:', group);
-
-				const profile = await client.getGroupMemberProfile(source.groupId, source.userId);
-				console.log('2. profile:', profile);
-
-				const queryUser = new Parse.Query(User);
-				queryUser.equalTo('userId', profile.userId);
-				let user = await queryUser.first();
-				!user && (user = new User());
-				user.set('userId', profile.userId);
-				user.set('username', profile.displayName);
-				user.set('imgUrl', profile.pictureUrl);
-				user = await user.save();
-				console.log('3. user:', user);
-
-				const relation = group.relation('member');
-				relation.add(user);
-				group.save();
-
-				console.log('4. group:', group);
-			}
+			catchProfile(source);
 
 			console.log(message);
 			switch (message.type) {
@@ -74,17 +47,17 @@ async function handleEvent(event) {
 					throw new Error(`Unknown message: ${JSON.stringify(message)}`);
 			}
 
-		// case 'follow':
-		//   return replyText(replyToken, 'Got followed event');
+		case 'follow':
+			return replyText(replyToken, 'Got followed event');
 
-		// case 'unfollow':
-		//   return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
+		case 'unfollow':
+			return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
-		// case 'join':
-		//   return replyText(replyToken, `Joined ${source.type}`);
+		case 'join':
+			return replyText(replyToken, `Joined ${source.type}`);
 
-		// case 'leave':
-		//   return console.log(`Left: ${JSON.stringify(event)}`);
+		case 'leave':
+			return console.log(`Left: ${JSON.stringify(event)}`);
 
 		case 'postback':
 			const data = event.postback.data;
@@ -96,15 +69,12 @@ async function handleEvent(event) {
 			}
 			return replyText(replyToken, `Got postback: ${data}`);
 
-		// case 'beacon':
-		//   return replyText(replyToken, `Got beacon: ${event.beacon.hwid}`);
-
 		default:
 			throw new Error(`Unknown event: ${JSON.stringify(event)}`);
 	}
 }
 
-function handleText(message, replyToken, source) {
+async function handleText(message, replyToken, source) {
 	console.log('message:', message.text);
 	var type = typing(message.text);
 	console.log('type:', type);
@@ -138,65 +108,44 @@ function handleText(message, replyToken, source) {
 				}
 			});
 		case 9: //小雷+吃大便
-			return client
-				.getProfile(source.userId)
-				.then((profile) =>
-					replyText(replyToken, [
-						`Profile: ${JSON.stringify(profile)}`,
-						`Source: ${JSON.stringify(source)}`
-					])
-				);
+			const profile = await client.getProfile(source.userId);
+			return replyText(replyToken, [
+				`Profile: ${JSON.stringify(profile)}`,
+				`Source: ${JSON.stringify(source)}`
+			]);
 		case 3: //小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
-					altText: `炸彈已啟動~`,
+					altText: `炸彈來來囉 (ง๑ •̀_•́)ง`,
 					template: {
 						type: 'buttons',
-						title: '炸彈已啟動',
-						text: `請在${cmds[1]} ${cmds[2]} 之前解除炸彈`,
+						title: '炸彈來來囉 (ง๑ •̀_•́)ง',
+						text: `${cmds[1]} ${cmds[2]} 隨機告⽩白`,
 						actions: [
-							{
-								type: 'uri',
-								label: '我要參加',
-								uri: 'http://example.com/page/123'
-							}
+							{ type: 'uri', label: '修改炸彈規則', uri: 'http://example.com/page/123' },
+							{ type: 'uri', label: '啟動炸彈', text: '小雷啟動炸彈' }
 						]
 					}
 				},
 				{ type: 'text', text: `God bless you.` }
 			]);
-		// case 5: //小雷+啟動炸彈
-		// 	return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
-		// case 17: //小雷+我要參加
-		// 	return client.replyMessage(replyToken, {
-		// 		type: 'template',
-		// 		altText: 'This is a buttons template',
-		// 		template: {
-		// 			type: 'buttons',
-		// 			title: 'Menu',
-		// 			text: 'Please select',
-		// 			defaultAction: {
-		// 				type: 'uri',
-		// 				label: 'View detail',
-		// 				uri: 'http://example.com/page/123'
-		// 			},
-		// 			actions: [
-		// 				{
-		// 					type: 'uri',
-		// 					label: '設置信用卡',
-		// 					uri: 'http://example.com/page/123'
-		// 				},
-		// 				{
-		// 					type: 'postback',
-		// 					label: '設置信用卡',
-		// 					data: 'action=buy&itemid=123'
-		// 				}
-		// 			]
-		// 		}
-		// 	});
+		case 5: //小雷+啟動炸彈
+			return client.replyMessage(replyToken, [
+				{
+					type: 'template',
+					altText: `炸彈定時囉ξ( ✿＞◡❛)`,
+					template: {
+						type: 'buttons',
+						title: '炸彈定時囉ξ( ✿＞◡❛)',
+						text: `有種就選最難的`,
+						actions: [ { type: 'uri', label: '參加炸彈挑戰', uri: 'http://example.com/page/123' } ]
+					}
+				},
+				{ type: 'text', text: `Rex：三小啦` }
+			]);
 	}
 }
 
@@ -210,6 +159,70 @@ function handleLocation(message, replyToken) {
 	});
 }
 
+async function catchProfile({ type, userId, groupId }) {
+	const queryUser = new Parse.Query(User);
+	const queryGroup = new Parse.Query(Group);
+	const profile = await client.getProfile(userId);
+
+	console.log('1. profile:', profile);
+
+	queryUser.equalTo('userId', profile.userId);
+	let user = await queryUser.first();
+	{
+		!user && (user = new User());
+		user.set('userId', profile.userId);
+		user.set('username', profile.displayName);
+		user.set('imgUrl', profile.pictureUrl);
+		user = await user.save();
+	}
+	console.log('2. user:', user.toJSON());
+
+	if (type === 'group') {
+		queryGroup.equalTo('groupId', groupId);
+		let group = await queryGroup.first();
+		{
+			!group && (group = new Group());
+			group.set('groupId', groupId);
+			group = await group.save();
+		}
+
+		const relation = group.relation('member');
+		relation.add(user);
+		group.save();
+
+		console.log('3. group:', group.toJSON());
+	}
+}
+
+// case 5: //小雷+啟動炸彈
+// 	return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
+// case 17: //小雷+我要參加
+// 	return client.replyMessage(replyToken, {
+// 		type: 'template',
+// 		altText: 'This is a buttons template',
+// 		template: {
+// 			type: 'buttons',
+// 			title: 'Menu',
+// 			text: 'Please select',
+// 			defaultAction: {
+// 				type: 'uri',
+// 				label: 'View detail',
+// 				uri: 'http://example.com/page/123'
+// 			},
+// 			actions: [
+// 				{
+// 					type: 'uri',
+// 					label: '設置信用卡',
+// 					uri: 'http://example.com/page/123'
+// 				},
+// 				{
+// 					type: 'postback',
+// 					label: '設置信用卡',
+// 					data: 'action=buy&itemid=123'
+// 				}
+// 			]
+// 		}
+// 	});
 // {
 // 	type: 'text',
 // 	text: 'Select Datetime!',
