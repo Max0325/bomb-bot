@@ -198,13 +198,13 @@ async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 
 	console.log('1. id:', id);
 
-	const channel = new Channel();
+	let channel = new Channel();
 	{
 		console.log('channel:', channel);
 		channel.set('type', type);
 		channel.set('id', id);
 		channel.set('replyToken', replyToken);
-		channel.save();
+		channel = await channel.save();
 	}
 
 	console.log('Register Channel:', channel);
