@@ -87,30 +87,41 @@ async function handleText(info, message, replyToken, source) {
 			break;
 		case 1: {
 			//小雷
+			const columns = [];
+			const queryBomb = new Parse.Query(Bomb);
+			{
+				queryBomb.equalTo('channel', channel);
+				queryBomb.containedIn('state', [ 'INIT', 'STARTED' ]);
+				queryBomb.descending('createdAt');
+			}
+			const bomb = await queryBomb.first().fetch();
+			if (bomb) {
+				const owner = bomb.get('owner').get('displayName');
+				const state = bomb.get('state');
+				const timestamp = bomb.get('timestamp');
+				const actions = [
+					{ label: '下注', type: 'uri', uri: 'https://line.me' },
+					{ label: '排行榜', type: 'uri', uri: 'https://line.me' }
+				];
+				state === 'INIT' && actions.push({ type: 'message', label: '啟動炸彈', text: '小雷啟動炸彈' });
+				state === 'STARTED' && actions.push({ type: 'message', label: '我要參加', text: '小雷 我要參加' });
+				const text = `
+				發起人：${owner}\n
+				引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
+				columns.push({ title: '即時戰況', text, actions });
+			}
+			columns.push({
+				title: '工具包',
+				text: '各種操作',
+				actions: [
+					{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
+					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
+				]
+			});
 			return client.replyMessage(replyToken, {
 				type: 'template',
 				altText: 'Carousel alt text',
-				template: {
-					type: 'carousel',
-					columns: [
-						{
-							title: '即時戰況',
-							text: 'ooxx',
-							actions: [
-								{ label: '下注', type: 'uri', uri: 'https://line.me' },
-								{ label: '排行榜', type: 'uri', uri: 'https://line.me' }
-							]
-						},
-						{
-							title: '工具包',
-							text: '各種操作',
-							actions: [
-								{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
-								{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
-							]
-						}
-					]
-				}
+				template: { type: 'carousel', columns }
 			});
 		}
 		case 9: {
@@ -159,15 +170,17 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.equalTo('state', 'INIT');
 				queryBomb.descending('createdAt');
 			}
-			const bomb = await queryBomb.first();
-			const bombOwner = await bomb.get('owner').fetch();
+			const bomb = await queryBomb.first().fetch();
+			const owner = bomb.get('owner');
+			const ownerName = owner.get('displayName');
+			const state = bomb.get('state');
 			console.log(bombOwner);
 			console.log(bombOwner.toJSON());
-			if (bomb.get('state') === 'STARTED') {
+			if (state === 'STARTED') {
 				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
 			}
-			if (!user.equals(bombOwner)) {
-				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${bombOwner.get('displayName')} 啟動個屁啊！！` ]);
+			if (!user.equals(owner)) {
+				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${ownerName} 啟動個屁啊！！` ]);
 			}
 			await bomb.save({ state: 'STARTED' });
 			return client.replyMessage(replyToken, [
