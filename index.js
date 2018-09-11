@@ -196,17 +196,12 @@ async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
 	// const queryChannel = new Parse.Query(Channel);
 	const id = userId || roomId || groupId;
 
-	let channel = new Channel();
+	const channel = new Channel();
 	{
-		channel.set('type', type);
-		channel.set('id', id);
-		channel.set('replyToken', replyToken);
-		console.log('1. channel:', channel, type, id, replyToken);
-		channel = await channel.save();
-		console.log('2. channel:', channel, type, id, replyToken);
+		console.log('1. channel:', channel.toJSON(), type, id, replyToken);
+		const result = await channel.save({ type, id, replyToken });
+		console.log('2. result:', result.toJSON());
 	}
-
-	console.log('Register Channel:', channel);
 }
 
 // case 5: //小雷+啟動炸彈
