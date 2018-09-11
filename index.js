@@ -123,6 +123,7 @@ async function handleText(info, message, replyToken, source) {
 				});
 			}
 			const bomb = new Bomb();
+			console.log('QQ:', _.drop(cmds).join(' '));
 			bomb.save({
 				timestamp: +moment(_.drop(cmds).join(' ')),
 				owner: user,
