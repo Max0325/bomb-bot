@@ -3,6 +3,7 @@ const express = require('express');
 const Parse = require('parse/node');
 const _ = require('lodash');
 const moment = require('moment');
+const beautify = require('json-beautify');
 
 Parse.initialize('AppId', '', 'MasterKey');
 Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
@@ -24,7 +25,7 @@ const replyText = (token, texts) => {
 };
 
 function handleEvent(event) {
-	console.log(event);
+	console.log(beautify(event, null, 2, 100));
 
 	const { type, source, replyToken, message } = event;
 
@@ -165,7 +166,7 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 	const queryChannel = new Parse.Query(Channel);
 	const profile = await client.getProfile(userId);
 
-	console.log('Profile:', profile);
+	console.log('Profile:', beautify(profile, null, 2, 100));
 
 	queryUser.equalTo('userId', profile.userId);
 
@@ -174,9 +175,9 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 		!user && (user = new User());
 		user = await user.save(profile);
 	}
-	console.log('User:', user.toJSON());
+	console.log('User:', beautify(user, null, 2, 100));
 
-	const channel = await queryChannel.equalTo('id', userId || roomId || groupId).first();
+	let channel = await queryChannel.equalTo('id', userId || roomId || groupId).first();
 
 	if (channel) {
 		const relation = channel.relation('member');
@@ -185,20 +186,16 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 		channel.set('replyToken', replyToken);
 		channel = await channel.save();
 
-		console.log('Register Channel:', channel.toJSON());
+		console.log('Register Channel:', beautify(channel.toJSON(), null, 2, 100));
 	}
 }
 
 async function registerChannel({ type, userId, roomId, groupId }, replyToken) {
-	// const queryChannel = new Parse.Query(Channel);
 	const key = userId || roomId || groupId;
 
-	const channel = new Channel();
-	{
-		console.log('1. channel:', channel.toJSON(), type, key, replyToken);
-		const result = await channel.save({ type, key, replyToken });
-		console.log('2. result:', result.toJSON());
-	}
+	let channel = new Channel();
+
+	channel = await channel.save({ type, key, replyToken });
 }
 
 // case 5: //小雷+啟動炸彈
