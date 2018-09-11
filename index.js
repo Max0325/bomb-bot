@@ -100,13 +100,9 @@ async function handleText(info, message, replyToken, source) {
 				const owner = bomb.get('owner').get('displayName');
 				const state = bomb.get('state');
 				const timestamp = bomb.get('timestamp');
-				const actions = [
-					{ label: '下注', type: 'uri', uri: 'https://line.me' },
-					{ label: '排行榜', type: 'uri', uri: 'https://line.me' },
-					{ label: 'OOXX', type: 'uri', uri: 'https://line.me' }
-				];
-				// state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
-				// state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
+				const actions = [ { label: '下注', type: 'uri', uri: 'https://line.me' } ];
+				state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
+				state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
 				const text = `發起人：${owner}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
 				columns.push({ title: '即時戰況', text, actions });
 			}
@@ -115,8 +111,7 @@ async function handleText(info, message, replyToken, source) {
 				text: '各種操作',
 				actions: [
 					{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
-					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' },
-					{ label: '吃大便', type: 'message', text: '吃大便' }
+					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
 				]
 			});
 			console.log(beautify(columns, null, 2, 80));
