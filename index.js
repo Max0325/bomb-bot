@@ -162,9 +162,10 @@ function handleLocation(message, replyToken) {
 }
 
 async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
+	const key = userId || roomId || groupId;
 	const queryUser = new Parse.Query(User);
 	const queryChannel = new Parse.Query(Channel);
-	
+
 	const profile = await client.getProfile(userId);
 	console.log('Profile:', beautify(profile, null, 2, 80));
 
@@ -174,8 +175,6 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 		user = await user.save(profile);
 	}
 	console.log('User:', beautify(user, null, 2, 80));
-
-	const key = userId || roomId || groupId;
 
 	let channel = await queryChannel.equalTo('key', key).first();
 
