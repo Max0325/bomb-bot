@@ -164,28 +164,27 @@ async function catchProfile({ userId, roomId, groupId }, replyToken) {
 	const queryChannel = new Parse.Query(Channel);
 
 	const profile = await client.getProfile(userId);
-	console.log('Profile:', beautify(profile, null, 2, 80));
+	{
+		console.log('Profile:', beautify(profile, null, 2, 80));
+	}
 
 	let user = await queryUser.equalTo('userId', profile.userId).first();
-	console.log('Query User:', user);
 	{
 		!user && (user = new User());
 		user = await user.save(profile);
+		console.log('User:', beautify(user, null, 2, 80));
 	}
-	console.log('User:', beautify(user, null, 2, 80));
 
 	let channel = await queryChannel.equalTo('key', key).first();
+	{
+		if (channel) {
+			const relation = channel.relation('member');
 
-	console.log('Query Channel:', channel, key);
-
-	if (channel) {
-		const relation = channel.relation('member');
-
-		relation.add(user);
-		channel.set('replyToken', replyToken);
-		channel = await channel.save();
-
-		console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
+			relation.add(user);
+			channel.set('replyToken', replyToken);
+			channel = await channel.save();
+			console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
+		}
 	}
 }
 
@@ -272,7 +271,7 @@ app.post('/', line.middleware(lineConfig), (req, res) => {
 	});
 });
 
-const port = process.env.PORT || 10000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log(`listening on ${port}`);
 });
