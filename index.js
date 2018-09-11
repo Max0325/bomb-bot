@@ -24,18 +24,18 @@ const replyText = (token, texts) => {
 	return client.replyMessage(token, texts.map((text) => ({ type: 'text', text })));
 };
 
-function handleEvent(event) {
+async function handleEvent(event) {
 	console.log(beautify(event, null, 2, 80));
 
 	const { type, source, replyToken, message } = event;
 
 	switch (type) {
 		case 'message':
-			catchProfile(source, replyToken);
+			const data = await catchProfile(source, replyToken);
 
 			switch (message.type) {
 				case 'text':
-					return handleText(message, replyToken, source);
+					return handleText(data, message, replyToken, source);
 				// case 'image':
 				//   return handleImage(message, replyToken);
 				// case 'video':
@@ -78,8 +78,10 @@ function handleEvent(event) {
 	}
 }
 
-async function handleText(message, replyToken, source) {
+async function handleText(data, message, replyToken, source) {
+	const { channel, user } = data;
 	const type = typing(message.text);
+
 	switch (type) {
 		case 0:
 			break;
@@ -115,6 +117,18 @@ async function handleText(message, replyToken, source) {
 		case 3: //小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
+			if (cmds.length < 3) {
+				return client.replyMessage(event.replyToken, {
+					type: 'text',
+					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018/10/04 10:30'
+				});
+			}
+			const bomb = new Bomb();
+			bomb.save({
+				datetime: moment(_.drop(cmds).join('T')).toString(),
+				owner: user,
+				channel: channel
+			});
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -186,6 +200,8 @@ async function catchProfile(source, replyToken) {
 			console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
 		}
 	}
+
+	return { channel, user };
 }
 
 async function registerChannel(source, replyToken) {
