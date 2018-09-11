@@ -171,9 +171,8 @@ async function catchProfile({ type, userId, roomId, groupId }, replyToken) {
 
 	let user = await queryUser.first();
 	{
-		const { userId, displayName, pictureUrl } = profile;
 		!user && (user = new User());
-		user = await user.save({ userId, displayName, pictureUrl });
+		user = await user.save(profile);
 	}
 	console.log('User:', user.toJSON());
 
