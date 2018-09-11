@@ -173,7 +173,7 @@ function handleLocation(message, replyToken) {
 }
 
 async function catchProfile(source, replyToken) {
-	const { type, roomId, groupId } = source;
+	const { userId, roomId, groupId } = source;
 	const key = roomId || groupId;
 	const queryUser = new Parse.Query(User);
 	const queryChannel = new Parse.Query(Channel);
