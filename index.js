@@ -329,6 +329,8 @@ async function registerChannel(source, replyToken) {
 
 	const channel = await queryChannel.first();
 
+	console.log(channel);
+
 	!channel && new Channel().save({ type, key, replyToken });
 }
 
