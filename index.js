@@ -221,12 +221,16 @@ function handleLocation(message, replyToken) {
 	});
 }
 
-function handleBomb(bomb) {
+async function handleBomb(bomb) {
 	console.log('handleBomb:', beautify(bomb.toJSON(), null, 2, 80));
 	const { channel } = bomb.toJSON();
 	const { replyToken } = channel;
 
-	replyText(replyToken, [ `要爆了～`, `啊～～～` ]);
+	console.log(channel, replyToken);
+
+	await replyText(replyToken, [ `要爆了～`, `啊～～～` ]);
+
+	await bomb.save({ state: 'STARTED' });
 }
 
 async function catchProfile(source, replyToken) {
