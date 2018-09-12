@@ -145,7 +145,10 @@ async function handleText(info, message, replyToken, source) {
 			}
 			const bomb = await queryBomb.first();
 			bomb && (await bomb.save({ state: 'INVALID' }));
-			console.log(_.drop(cmds).join('T'), +moment(_.drop(cmds).join('T')));
+			console.log(_.drop(cmds).join('T'));
+			console.log(+moment(_.drop(cmds).join('T')));
+			console.log(+moment(_.drop(cmds).join(' ')));
+			console.log(+moment(`${cmds[1]}T${cmds[2]}Z`));
 			await new Bomb().save({
 				timestamp: +moment(_.drop(cmds).join(' ')),
 				owner: user,
