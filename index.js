@@ -213,9 +213,7 @@ function handleLocation(message, replyToken) {
 	});
 }
 
-function handleBomb() {
-
-}
+function handleBomb() {}
 
 async function catchProfile(source, replyToken) {
 	const { roomId, groupId } = source;
@@ -254,11 +252,11 @@ async function getProfile(source) {
 	const key = roomId || groupId;
 	switch (type) {
 		case 'user':
-			return await getProfile(userId);
+			return await client.getProfile(userId);
 		case 'room':
-			return await getRoomMemberProfile(key, userId);
+			return await client.getRoomMemberProfile(key, userId);
 		case 'group':
-			return await getGroupMemberProfile(key, userId);
+			return await client.getGroupMemberProfile(key, userId);
 	}
 }
 
