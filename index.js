@@ -78,10 +78,13 @@ async function handleEvent(event) {
 			}
 
 			const query = _(data).split('&').map(_.partial(_.split, _, '=', 2)).fromPairs().value();
-			
-			console.log(query);
 
-			return replyText(replyToken, `Got postback: ${data}`);
+			switch (query.action) {
+				case 'join':
+					break;
+			}
+
+			return replyText(replyToken, `query: ${beautify(query, null, 2, 25)}`);
 
 		default:
 			throw new Error(`Unknown event: ${JSON.stringify(event)}`);
@@ -216,13 +219,30 @@ async function handleText(info, message, replyToken, source) {
 						text: `有種就選最難的`,
 						actions: [
 							{ label: '參加炸彈挑戰', type: 'uri', uri: 'http://example.com/page/123' },
-							{ label: '我要參加', type: 'postback', data: `action=join&bombid=${objectId}` }
+							{ label: '我要參加', type: 'message', text: '小雷我要參加' }
 						]
 					}
 				}
 			]);
 		}
 		case 17: {
+			//小雷+我要參加
+			const queryBomb = new Parse.Query(Bomb);
+			{
+				queryBomb.equalTo('channel', channel);
+				queryBomb.equalTo('state', 'STARTED');
+				queryBomb.descending('createdAt');
+				queryBomb.includeAll();
+			}
+			let bomb = await queryBomb.first();
+			{
+				const players = bomb.relation('players');
+				const activate = bomb.relation('activate');
+				players.add(user);
+				activate.add(user);
+				bomb = await bomb.save();
+			}
+			console.log(bomb.get('players'));
 		}
 	}
 }
@@ -266,9 +286,8 @@ async function catchProfile(source, replyToken) {
 	let channel = await queryChannel.equalTo('key', key).first();
 	{
 		if (channel) {
-			const relation = channel.relation('member');
-
-			relation.add(user);
+			const member = channel.relation('member');
+			member.add(user);
 			channel = await channel.save({ replyToken });
 			// console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
 		}
