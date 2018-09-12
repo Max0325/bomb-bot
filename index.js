@@ -246,7 +246,8 @@ async function handleText(info, message, replyToken, source) {
 				queryPlayers.select('displayName');
 			}
 			const players = await queryPlayers.find();
-			console.log(players.map((obj) => obj.toJSON()));
+
+			return replyText(replyToken, `參加的人：\n${players.map((user) => user.get('displayName')).join('\n')}`);
 		}
 	}
 }
