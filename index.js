@@ -242,7 +242,8 @@ async function handleText(info, message, replyToken, source) {
 				activate.add(user);
 				bomb = await bomb.save();
 			}
-			console.log(bomb.get('players'));
+			const players = await bomb.get('players').query();
+			console.log(players);
 		}
 	}
 }
