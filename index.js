@@ -34,7 +34,6 @@ async function handleEvent(event) {
 	// console.log(beautify(event, null, 2, 80));
 
 	const { type, source, replyToken, message } = event;
-	registerChannel(source, replyToken);
 	const info = await catchProfile(source, replyToken);
 
 	switch (type) {
@@ -63,7 +62,6 @@ async function handleEvent(event) {
 			return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
 
 		case 'join':
-			// registerChannel(source, replyToken);
 			return replyText(replyToken, `Joined ${source.type}`);
 
 		case 'leave':
@@ -289,14 +287,12 @@ async function catchProfile(source, replyToken) {
 		console.log('User:', beautify(user, null, 2, 80));
 	}
 
-	let channel = await queryChannel.equalTo('key', key).first();
+	const channel = await registerChannel(source, replyToken);
 	{
-		if (channel) {
-			const member = channel.relation('member');
-			member.add(user);
-			channel = await channel.save({ replyToken });
-			console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
-		}
+		const member = channel.relation('member');
+		member.add(user);
+		channel = await channel.save({ replyToken });
+		console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
 	}
 
 	return { channel, user };
@@ -329,9 +325,7 @@ async function registerChannel(source, replyToken) {
 
 	const channel = await queryChannel.first();
 
-	console.log(channel);
-
-	!channel && new Channel().save({ type, key, replyToken });
+	return channel ? channel : await new Channel().save({ type, key, replyToken });
 }
 
 function typing(cmd) {
