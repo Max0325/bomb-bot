@@ -68,8 +68,8 @@ async function handleEvent(event) {
 
 			if (data === 'DATETIME') {
 				const dt = moment(event.postback.params.datetime);
-				console.log(dt);
 				const message = { text: `Postback:小雷裝炸彈 ${dt.format('YYYY-MM-DD HH:mm')}` };
+				console.log(event.postback.params.datetime, message);
 				return handleText(info, message, replyToken, source);
 			}
 			return replyText(replyToken, `Got postback: ${data}`);
