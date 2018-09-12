@@ -115,7 +115,6 @@ async function handleText(info, message, replyToken, source) {
 					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
 				]
 			});
-			console.log(beautify(columns, null, 2, 80));
 			return client.replyMessage(replyToken, {
 				type: 'template',
 				altText: '小雷Menu',
@@ -202,6 +201,12 @@ async function handleText(info, message, replyToken, source) {
 			const handler = _.bind(handleBomb, bomb);
 			console.log(date.toString(), handler);
 			const job = schedule.scheduleJob(date, handler);
+
+			var d = new Date(2018, 9, 12, 15, 35, 0);
+			console.log(d.toString());
+			var j = schedule.scheduleJob(d, () => {
+				console.log('The world is going to end today.');
+			});
 
 			console.log('job:', beautify(job, null, 2, 80));
 
