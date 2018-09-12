@@ -270,21 +270,21 @@ async function handleBomb(bomb) {
 }
 
 async function catchProfile(source, replyToken) {
-	const { roomId, groupId } = source;
-	// const key = roomId || groupId;
-	const queryUser = new Parse.Query(User);
-	// const queryChannel = new Parse.Query(Channel);
-
 	const profile = await getProfile(source);
 	{
-		console.log('Profile:', beautify(profile, null, 2, 80));
+		// console.log('Profile:', beautify(profile, null, 2, 80));
 	}
 
-	let user = await queryUser.equalTo('userId', profile.userId).first();
+	const queryUser = new Parse.Query(User);
+	{
+		queryUser.equalTo('userId', profile.userId);
+	}
+
+	let user = await queryUser.first();
 	{
 		!user && (user = new User());
 		user = await user.save(profile);
-		console.log('User:', beautify(user, null, 2, 80));
+		// console.log('User:', beautify(user, null, 2, 80));
 	}
 
 	let channel = await registerChannel(source, replyToken);
@@ -292,7 +292,7 @@ async function catchProfile(source, replyToken) {
 		const member = channel.relation('member');
 		member.add(user);
 		channel = await channel.save({ replyToken });
-		console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
+		// console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
 	}
 
 	return { channel, user };
