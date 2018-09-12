@@ -3,9 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
-	"devDependencies": {
-		"express": "^4.16.3"
-	},
+	"devDependencies": {},
 	"scripts": {
 		"start": "node ."
 	},
@@ -13,6 +11,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@line/bot-sdk": "^6.2.1",
+		"express": "^4.16.3",
 		"json-beautify": "^1.0.1",
 		"lodash": "^4.17.10",
 		"moment": "^2.22.2",
