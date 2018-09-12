@@ -278,7 +278,7 @@ async function catchProfile(source, replyToken) {
 
 	const profile = await getProfile(source);
 	{
-		// console.log('Profile:', beautify(profile, null, 2, 80));
+		console.log('Profile:', beautify(profile, null, 2, 80));
 	}
 
 	let user = await queryUser.equalTo('userId', profile.userId).first();
