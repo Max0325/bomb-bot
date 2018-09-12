@@ -152,8 +152,8 @@ async function handleText(info, message, replyToken, source) {
 
 			const t = +moment(_.drop(cmds).join(' '));
 
-			console.log(moment(t).toDate());
-			console.log(moment.utc(t).toDate());
+			console.log(moment(t).toDate().toString());
+			console.log(moment.utc(t).toDate().toString());
 
 			await new Bomb().save({
 				timestamp: +moment(_.drop(cmds).join(' ')),
@@ -200,7 +200,7 @@ async function handleText(info, message, replyToken, source) {
 
 			const date = moment(timestamp).local().toDate();
 			const handler = _.bind(handleBomb, bomb);
-			console.log(date, handler);
+			console.log(date.toString(), handler);
 			const job = schedule.scheduleJob(date, handler);
 
 			console.log('job:', beautify(job, null, 2, 80));
