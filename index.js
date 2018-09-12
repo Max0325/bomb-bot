@@ -214,12 +214,12 @@ function handleLocation(message, replyToken) {
 }
 
 async function catchProfile(source, replyToken) {
-	const { userId, roomId, groupId } = source;
+	const { roomId, groupId } = source;
 	const key = roomId || groupId;
 	const queryUser = new Parse.Query(User);
 	const queryChannel = new Parse.Query(Channel);
 
-	const profile = await client.getProfile(userId);
+	const profile = await getProfile(source);
 	{
 		console.log('Profile:', beautify(profile, null, 2, 80));
 	}
@@ -245,6 +245,19 @@ async function catchProfile(source, replyToken) {
 	return { channel, user };
 }
 
+async function getProfile(source) {
+	const { type, userId, roomId, groupId } = source;
+	const key = roomId || groupId;
+	switch (type) {
+		case 'user':
+			return await getProfile(userId);
+		case 'room':
+			return await getRoomMemberProfile(key, userId);
+		case 'group':
+			return await getGroupMemberProfile(key, userId);
+	}
+}
+
 async function registerChannel(source, replyToken) {
 	const { type, roomId, groupId } = source;
 
@@ -254,6 +267,27 @@ async function registerChannel(source, replyToken) {
 
 	await new Channel().save({ type, key, replyToken });
 }
+
+function typing(cmd) {
+	var result = 0;
+	cmd.includes('小雷') && (result += Math.pow(2, 0)); //1
+	cmd.includes('裝炸彈') && (result += Math.pow(2, 1)); //2
+	cmd.includes('啟動炸彈') && (result += Math.pow(2, 2)); //4
+	cmd.includes('吃大便') && (result += Math.pow(2, 3)); //8
+	cmd.includes('我要參加') && (result += Math.pow(2, 4)); //16
+	return result;
+}
+
+app.post('/', line.middleware(lineConfig), (req, res) => {
+	Promise.all(req.body.events.map(handleEvent)).then(function(result) {
+		res.json(result);
+	});
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+	console.log(`listening on ${port}`);
+});
 
 // case 5: //小雷+啟動炸彈
 // 	return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
@@ -311,24 +345,3 @@ async function registerChannel(source, replyToken) {
 // 	text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
 // });
 // 'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
-
-function typing(cmd) {
-	var result = 0;
-	cmd.includes('小雷') && (result += Math.pow(2, 0)); //1
-	cmd.includes('裝炸彈') && (result += Math.pow(2, 1)); //2
-	cmd.includes('啟動炸彈') && (result += Math.pow(2, 2)); //4
-	cmd.includes('吃大便') && (result += Math.pow(2, 3)); //8
-	cmd.includes('我要參加') && (result += Math.pow(2, 4)); //16
-	return result;
-}
-
-app.post('/', line.middleware(lineConfig), (req, res) => {
-	Promise.all(req.body.events.map(handleEvent)).then(function(result) {
-		res.json(result);
-	});
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-	console.log(`listening on ${port}`);
-});
