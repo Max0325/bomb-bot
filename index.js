@@ -176,6 +176,7 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.includeAll();
 			}
 			const bomb = await queryBomb.first();
+			console.log('Bomb:', beautify(bomb.toJSON(), null, 2, 80));
 			const { owner: { displayName }, state, timestamp } = bomb.toJSON();
 			console.log('QQ:', owner, displayName, state, timestamp);
 			if (state === 'STARTED') {
