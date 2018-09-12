@@ -271,9 +271,9 @@ async function handleBomb(bomb) {
 
 async function catchProfile(source, replyToken) {
 	const { roomId, groupId } = source;
-	const key = roomId || groupId;
+	// const key = roomId || groupId;
 	const queryUser = new Parse.Query(User);
-	const queryChannel = new Parse.Query(Channel);
+	// const queryChannel = new Parse.Query(Channel);
 
 	const profile = await getProfile(source);
 	{
@@ -287,7 +287,7 @@ async function catchProfile(source, replyToken) {
 		console.log('User:', beautify(user, null, 2, 80));
 	}
 
-	const channel = await registerChannel(source, replyToken);
+	let channel = await registerChannel(source, replyToken);
 	{
 		const member = channel.relation('member');
 		member.add(user);
