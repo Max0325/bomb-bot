@@ -69,7 +69,6 @@ async function handleEvent(event) {
 			if (data === 'DATETIME') {
 				const dt = moment(event.postback.params.datetime);
 				const message = { text: `Postback:小雷裝炸彈 ${dt.format('YYYY-MM-DD HH:mm')}` };
-				console.log(event.postback.params.datetime, message);
 				return handleText(info, message, replyToken, source);
 			}
 			return replyText(replyToken, `Got postback: ${data}`);
@@ -130,32 +129,26 @@ async function handleText(info, message, replyToken, source) {
 			//小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
 			console.log(cmds);
+
 			if (cmds.length < 3) {
 				return client.replyMessage(event.replyToken, {
 					type: 'text',
 					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30'
 				});
 			}
+
 			const queryBomb = new Parse.Query(Bomb);
 			{
 				queryBomb.equalTo('channel', channel);
 				queryBomb.containedIn('state', [ 'INIT', 'STARTED' ]);
 				queryBomb.descending('createdAt');
 			}
+
 			const bomb = await queryBomb.first();
 			bomb && (await bomb.save({ state: 'INVALID' }));
-			console.log(_.drop(cmds).join('T'));
-			console.log(+moment(_.drop(cmds).join('T')));
-			console.log(+moment(_.drop(cmds).join(' ')));
-			console.log(+moment(`${cmds[1]}T${cmds[2]}Z`));
-
-			const t = +moment(_.drop(cmds).join(' '));
-
-			console.log(moment(t).toDate().toString());
-			console.log(moment.utc(t).toDate().toString());
 
 			await new Bomb().save({
-				timestamp: +moment(_.drop(cmds).join(' ')),
+				timestamp: +moment(_.drop(cmds).join('T')),
 				owner: user,
 				channel,
 				state: 'INIT'
@@ -197,17 +190,9 @@ async function handleText(info, message, replyToken, source) {
 			}
 			await bomb.save({ state: 'STARTED' });
 
-			const date = moment(timestamp).local().toDate();
-			const handler = _.bind(handleBomb, bomb);
-			console.log(date.toString(), handler);
+			const date = moment(timestamp).toDate();
+			const handler = _.bind(handleBomb, null, bomb);
 			const job = schedule.scheduleJob(date, handler);
-
-			var d = new Date(2018, 8, 12, 15, 40, 0);
-			console.log(d.toString());
-			var j = schedule.scheduleJob(d, () => {
-				console.log('The world is going to end today.');
-			});
-			console.log('QQ:', moment().toDate().toString());
 			console.log('job:', beautify(job, null, 2, 80));
 
 			return client.replyMessage(replyToken, [
