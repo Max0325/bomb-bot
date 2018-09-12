@@ -187,7 +187,7 @@ async function handleText(info, message, replyToken, source) {
 			}
 			await bomb.save({ state: 'STARTED' });
 
-			const date = moment(timestamp).utc().toDate();
+			const date = moment(timestamp).local().toDate();
 			const handler = _.bind(handleBomb, bomb);
 			console.log(date, handler);
 			const job = schedule.scheduleJob(date, handler);
