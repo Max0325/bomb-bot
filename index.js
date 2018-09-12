@@ -177,22 +177,21 @@ async function handleText(info, message, replyToken, source) {
 			}
 			const bomb = await queryBomb.first();
 			const owner = bomb.get('owner');
-			const displayName = owner.get('displayName');
+			const ownerName = owner.get('displayName');
 			const { state, timestamp } = bomb.toJSON();
-			console.log('QQ:', owner, displayName, state, timestamp);
 			if (state === 'STARTED') {
 				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
 			}
 			if (!user.equals(owner)) {
-				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${displayName} 啟動個屁啊！！` ]);
+				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${ownerName} 啟動個屁啊！！` ]);
 			}
 			await bomb.save({ state: 'STARTED' });
 
 			const handler = _.bind(handleBomb, bomb);
 
-			const job = schedule.scheduleJob(moment(timestamp).toDate(), (y) => {
-				console.log(y);
-			});
+			const job = schedule.scheduleJob(moment(timestamp).toDate(), handler);
+
+			console.log('job:', beautify(job, null, 2, 80));
 
 			return client.replyMessage(replyToken, [
 				{
