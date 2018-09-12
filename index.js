@@ -244,6 +244,7 @@ async function handleText(info, message, replyToken, source) {
 			}
 			const queryPlayers = bomb.get('players').query();
 			{
+				queryPlayers.toJSON();
 			}
 			const players = await queryPlayers.find();
 			console.log(players);
