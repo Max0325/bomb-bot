@@ -25,6 +25,11 @@ const replyText = (token, texts) => {
 	return client.replyMessage(token, texts.map((text) => ({ type: 'text', text })));
 };
 
+const pushText = (to, texts) => {
+	texts = Array.isArray(texts) ? texts : [ texts ];
+	return client.pushMessage(to, texts.map((text) => ({ type: 'text', text })));
+};
+
 async function handleEvent(event) {
 	// console.log(beautify(event, null, 2, 80));
 
@@ -224,13 +229,12 @@ function handleLocation(message, replyToken) {
 async function handleBomb(bomb) {
 	console.log('handleBomb:', beautify(bomb.toJSON(), null, 2, 80));
 	const { channel } = bomb.toJSON();
-	const { replyToken } = channel;
+	const { key } = channel;
 
 	console.log(channel, replyToken);
 
-	await replyText(replyToken, [ `要爆了～`, `啊～～～` ]);
-
-	await bomb.save({ state: 'STARTED' });
+	pushText(key, [ `要爆了～`, `啊～～～` ]);
+	bomb.save({ state: 'STARTED' });
 }
 
 async function catchProfile(source, replyToken) {
