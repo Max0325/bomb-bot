@@ -246,7 +246,7 @@ async function handleText(info, message, replyToken, source) {
 				queryPlayers.select('displayName');
 			}
 			const players = await queryPlayers.find();
-			console.log(players);
+			console.log(players.map((obj) => obj.toJSON()));
 		}
 	}
 }
