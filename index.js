@@ -231,8 +231,6 @@ async function handleBomb(bomb) {
 	const { channel } = bomb.toJSON();
 	const { key } = channel;
 
-	console.log(channel, replyToken);
-
 	pushText(key, [ `要爆了～`, `啊～～～` ]);
 	bomb.save({ state: 'STARTED' });
 }
