@@ -133,6 +133,7 @@ async function handleText(info, message, replyToken, source) {
 		case 3: {
 			//小雷+裝炸彈
 			const cmds = _.split(message.text, ' ');
+
 			console.log(cmds);
 
 			if (cmds.length < 3) {
@@ -227,12 +228,11 @@ function handleLocation(message, replyToken) {
 }
 
 async function handleBomb(bomb) {
-	console.log('handleBomb:', beautify(bomb.toJSON(), null, 2, 80));
 	const { channel } = bomb.toJSON();
 	const { key } = channel;
 
 	pushText(key, [ `要爆了～`, `啊～～～` ]);
-	bomb.save({ state: 'STARTED' });
+	bomb.save({ state: 'FINISHED' });
 }
 
 async function catchProfile(source, replyToken) {
