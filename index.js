@@ -186,6 +186,12 @@ async function handleText(info, message, replyToken, source) {
 			}
 			await bomb.save({ state: 'STARTED' });
 
+			const handler = _.bind(handleBomb, bomb);
+
+			const job = schedule.scheduleJob(moment(timestamp).toDate(), (y) => {
+				console.log(y);
+			});
+
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -212,7 +218,9 @@ function handleLocation(message, replyToken) {
 	});
 }
 
-function handleBomb() {}
+function handleBomb(bomb) {
+	console.log('handleBomb:', beautify(bomb.toJSON(), null, 2, 80));
+}
 
 async function catchProfile(source, replyToken) {
 	const { roomId, groupId } = source;
