@@ -243,14 +243,14 @@ async function catchProfile(source, replyToken) {
 
 	const profile = await getProfile(source);
 	{
-		console.log('Profile:', beautify(profile, null, 2, 80));
+		// console.log('Profile:', beautify(profile, null, 2, 80));
 	}
 
 	let user = await queryUser.equalTo('userId', profile.userId).first();
 	{
 		!user && (user = new User());
 		user = await user.save(profile);
-		console.log('User:', beautify(user, null, 2, 80));
+		// console.log('User:', beautify(user, null, 2, 80));
 	}
 
 	let channel = await queryChannel.equalTo('key', key).first();
@@ -260,7 +260,7 @@ async function catchProfile(source, replyToken) {
 
 			relation.add(user);
 			channel = await channel.save({ replyToken });
-			console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
+			// console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
 		}
 	}
 
