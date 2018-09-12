@@ -110,13 +110,12 @@ async function handleText(info, message, replyToken, source) {
 			}
 			const bomb = await queryBomb.first();
 			if (bomb) {
-				const owner = bomb.get('owner').get('displayName');
-				const state = bomb.get('state');
-				const timestamp = bomb.get('timestamp');
+				const { owner, state, timestamp } = bomb.toJSON();
+				const ownerName = owner.displayName;
 				const actions = [ { label: '下注', type: 'uri', uri: 'https://line.me' } ];
 				state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
 				state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
-				const text = `發起人：${owner}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
+				const text = `發起人：${ownerName}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
 				columns.push({ title: '炸彈狀態', text, actions });
 			}
 			columns.push({
@@ -244,7 +243,7 @@ async function handleText(info, message, replyToken, source) {
 			}
 			const queryPlayers = bomb.get('players').query();
 			{
-				queryPlayers.toJSON();
+				queryPlayers.select('displayName');
 			}
 			const players = await queryPlayers.find();
 			console.log(players);
