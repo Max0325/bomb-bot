@@ -172,7 +172,7 @@ async function handleText(info, message, replyToken, source) {
 			const queryBomb = new Parse.Query(Bomb);
 			{
 				queryBomb.equalTo('channel', channel);
-				queryBomb.equalTo('state', 'INIT');
+				// queryBomb.equalTo('state', 'INIT');
 				queryBomb.descending('createdAt');
 				queryBomb.includeAll();
 			}
@@ -211,6 +211,10 @@ function handleLocation(message, replyToken) {
 		latitude: message.latitude,
 		longitude: message.longitude
 	});
+}
+
+function handleBomb() {
+
 }
 
 async function catchProfile(source, replyToken) {
