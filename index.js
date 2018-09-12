@@ -147,7 +147,7 @@ async function handleText(info, message, replyToken, source) {
 			bomb && (await bomb.save({ state: 'INVALID' }));
 			console.log(_.drop(cmds).join('T'), +moment(_.drop(cmds).join('T')));
 			await new Bomb().save({
-				timestamp: +moment(_.drop(cmds).join('T')),
+				timestamp: +moment(_.drop(cmds).join(' ')),
 				owner: user,
 				channel,
 				state: 'INIT'
