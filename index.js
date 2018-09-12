@@ -202,7 +202,7 @@ async function handleText(info, message, replyToken, source) {
 			console.log(date.toString(), handler);
 			const job = schedule.scheduleJob(date, handler);
 
-			var d = new Date(2018, 9, 12, 15, 35, 0);
+			var d = new Date(2018, 8, 12, 15, 40, 0);
 			console.log(d.toString());
 			var j = schedule.scheduleJob(d, () => {
 				console.log('The world is going to end today.');
