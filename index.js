@@ -223,6 +223,10 @@ function handleLocation(message, replyToken) {
 
 function handleBomb(bomb) {
 	console.log('handleBomb:', beautify(bomb.toJSON(), null, 2, 80));
+	const { channel } = bomb.toJSON();
+	const { replyToken } = channel;
+
+	replyText(replyToken, [ `要爆了～`, `啊～～～` ]);
 }
 
 async function catchProfile(source, replyToken) {
