@@ -76,6 +76,11 @@ async function handleEvent(event) {
 				const message = { text: `Postback:小雷裝炸彈 ${dt.format('YYYY-MM-DD HH:mm')}` };
 				return handleText(info, message, replyToken, source);
 			}
+
+			const query = _(data).split('&').map(_.partial(_.split, _, '=', 2)).fromPairs().value();
+			
+			console.log(query);
+
 			return replyText(replyToken, `Got postback: ${data}`);
 
 		default:
@@ -187,7 +192,7 @@ async function handleText(info, message, replyToken, source) {
 			const bomb = await queryBomb.first();
 			const owner = bomb.get('owner');
 			const ownerName = owner.get('displayName');
-			const { state, timestamp } = bomb.toJSON();
+			const { objectId, state, timestamp } = bomb.toJSON();
 			if (state === 'STARTED') {
 				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
 			}
@@ -209,10 +214,15 @@ async function handleText(info, message, replyToken, source) {
 						type: 'buttons',
 						title: '炸彈定時囉ξ( ✿＞◡❛)',
 						text: `有種就選最難的`,
-						actions: [ { type: 'uri', label: '參加炸彈挑戰', uri: 'http://example.com/page/123' } ]
+						actions: [
+							{ label: '參加炸彈挑戰', type: 'uri', uri: 'http://example.com/page/123' },
+							{ label: '我要參加', type: 'postback', data: `action=join&bombid=${objectId}` }
+						]
 					}
 				}
 			]);
+		}
+		case 17: {
 		}
 	}
 }
