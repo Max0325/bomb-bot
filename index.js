@@ -207,7 +207,7 @@ async function handleText(info, message, replyToken, source) {
 			var j = schedule.scheduleJob(d, () => {
 				console.log('The world is going to end today.');
 			});
-			console.log(moment().toDate());
+			console.log('QQ:', moment().toDate());
 			console.log('job:', beautify(job, null, 2, 80));
 
 			return client.replyMessage(replyToken, [
