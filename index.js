@@ -149,6 +149,12 @@ async function handleText(info, message, replyToken, source) {
 			console.log(+moment(_.drop(cmds).join('T')));
 			console.log(+moment(_.drop(cmds).join(' ')));
 			console.log(+moment(`${cmds[1]}T${cmds[2]}Z`));
+
+			const t = +moment(_.drop(cmds).join(' '));
+
+			console.log(moment(t).toDate());
+			console.log(moment.utc(t).toDate());
+
 			await new Bomb().save({
 				timestamp: +moment(_.drop(cmds).join(' ')),
 				owner: user,
