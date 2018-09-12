@@ -176,8 +176,9 @@ async function handleText(info, message, replyToken, source) {
 				queryBomb.includeAll();
 			}
 			const bomb = await queryBomb.first();
-			console.log('Bomb:', bomb);
-			const { owner: { displayName }, state, timestamp } = bomb;
+			const owner = bomb.get('owner');
+			const displayName = owner.get('displayName');
+			const { state, timestamp } = bomb.toJSON();
 			console.log('QQ:', owner, displayName, state, timestamp);
 			if (state === 'STARTED') {
 				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
