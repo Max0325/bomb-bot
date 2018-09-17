@@ -6,6 +6,8 @@ const beautify = require('json-beautify');
 const schedule = require('node-schedule');
 const core = require('./lib');
 
+console.log('core:', core);
+
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
 	channelSecret: process.env.HEROKU_LINE_CHANNEL_SECRET
