@@ -1,17 +1,11 @@
 const line = require('@line/bot-sdk');
 const express = require('express');
-const Parse = require('parse/node');
 const _ = require('lodash');
 const moment = require('moment');
 const beautify = require('json-beautify');
 const schedule = require('node-schedule');
 
-Parse.initialize('AppId', '', 'MasterKey');
-Parse.serverURL = 'https://spe3d.herokuapp.com/parse';
-
-const Channel = Parse.Object.extend('Channel');
-const User = Parse.Object.extend('SpeUser');
-const Bomb = Parse.Object.extend('Bomb');
+import Core from './lib';
 
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
@@ -34,7 +28,7 @@ async function handleEvent(event) {
 	// console.log(beautify(event, null, 2, 80));
 
 	const { type, source, replyToken, message } = event;
-	const info = await catchProfile(source, replyToken);
+	const info = await Core.catchProfile(source, replyToken);
 
 	switch (type) {
 		case 'message':
@@ -100,14 +94,7 @@ async function handleText(info, message, replyToken, source) {
 		case 1: {
 			//小雷
 			const columns = [];
-			const queryBomb = new Parse.Query(Bomb);
-			{
-				queryBomb.equalTo('channel', channel);
-				queryBomb.containedIn('state', [ 'INIT', 'STARTED' ]);
-				queryBomb.descending('createdAt');
-				queryBomb.includeAll();
-			}
-			const bomb = await queryBomb.first();
+			const bomb = await Core.findBomb(channel, [ 'INIT', 'STARTED' ]);
 			if (bomb) {
 				const { owner, state, timestamp } = bomb.toJSON();
 				const ownerName = owner.displayName;
@@ -149,22 +136,8 @@ async function handleText(info, message, replyToken, source) {
 				});
 			}
 
-			const queryBomb = new Parse.Query(Bomb);
-			{
-				queryBomb.equalTo('channel', channel);
-				queryBomb.containedIn('state', [ 'INIT', 'STARTED' ]);
-				queryBomb.descending('createdAt');
-			}
+			await Core.setupBomb(channel);
 
-			const bomb = await queryBomb.first();
-			bomb && (await bomb.save({ state: 'INVALID' }));
-
-			await new Bomb().save({
-				timestamp: +moment(_.drop(cmds).join('T')),
-				owner: user,
-				channel,
-				state: 'INIT'
-			});
 			return client.replyMessage(replyToken, [
 				{
 					type: 'template',
@@ -184,13 +157,7 @@ async function handleText(info, message, replyToken, source) {
 		}
 		case 5: {
 			//小雷+啟動炸彈
-			const queryBomb = new Parse.Query(Bomb);
-			{
-				queryBomb.equalTo('channel', channel);
-				queryBomb.descending('createdAt');
-				queryBomb.includeAll();
-			}
-			const bomb = await queryBomb.first();
+			const bomb = await Core.findBomb(channel);
 			const owner = bomb.get('owner');
 			const ownerName = owner.get('displayName');
 			const { objectId, state, timestamp } = bomb.toJSON();
@@ -225,26 +192,11 @@ async function handleText(info, message, replyToken, source) {
 		}
 		case 17: {
 			//小雷+我要參加
-			const queryBomb = new Parse.Query(Bomb);
-			{
-				queryBomb.equalTo('channel', channel);
-				queryBomb.equalTo('state', 'STARTED');
-				queryBomb.descending('createdAt');
-				queryBomb.includeAll();
-			}
-			let bomb = await queryBomb.first();
-			{
-				const players = bomb.relation('players');
-				const activate = bomb.relation('activate');
-				players.add(user);
-				activate.add(user);
-				bomb = await bomb.save();
-			}
-			const queryPlayers = bomb.get('players').query();
-			{
-				queryPlayers.select('displayName');
-			}
-			const players = await queryPlayers.find();
+			let bomb = await Core.findBomb(channel, [ 'STARTED' ]);
+
+			bomb = await bomb.join(user);
+
+			const players = await bomb.getPlayers();
 
 			return replyText(replyToken, `參加的人：\n${players.map((user) => user.get('displayName')).join('\n')}`);
 		}
@@ -269,36 +221,26 @@ async function handleBomb(bomb) {
 	bomb.save({ state: 'FINISHED' });
 }
 
-async function catchProfile(source, replyToken) {
+catchProfil = async (source, replyToken) => {
 	const profile = await getProfile(source);
 	{
 		// console.log('Profile:', beautify(profile, null, 2, 80));
 	}
 
-	const queryUser = new Parse.Query(User);
+	let user = (await Core.findUser(profile.userId)) || new SpeUser();
 	{
-		queryUser.equalTo('userId', profile.userId);
-	}
-
-	let user = await queryUser.first();
-	{
-		!user && (user = new User());
 		user = await user.save(profile);
 		// console.log('User:', beautify(user, null, 2, 80));
 	}
 
-	let channel = await registerChannel(source, replyToken);
-	{
-		const member = channel.relation('member');
-		member.add(user);
-		channel = await channel.save({ replyToken });
-		// console.log('Relation Channel:', beautify(channel.toJSON(), null, 2, 80));
-	}
+	let channel = await Core.registerChannel(source, replyToken);
+
+	await channel.join(user);
 
 	return { channel, user };
-}
+};
 
-async function getProfile(source) {
+getProfile = async (source) => {
 	const { type, userId, roomId, groupId } = source;
 	const key = roomId || groupId;
 	switch (type) {
@@ -309,24 +251,7 @@ async function getProfile(source) {
 		case 'group':
 			return await client.getGroupMemberProfile(key, userId);
 	}
-}
-
-async function registerChannel(source, replyToken) {
-	const { type, roomId, groupId } = source;
-
-	if (type === 'user') return;
-
-	const key = roomId || groupId;
-
-	const queryChannel = new Parse.Query(Channel);
-	{
-		queryChannel.equalTo('key', key);
-	}
-
-	const channel = await queryChannel.first();
-
-	return channel ? channel : await new Channel().save({ type, key, replyToken });
-}
+};
 
 function typing(cmd) {
 	var result = 0;
@@ -345,63 +270,7 @@ app.post('/', line.middleware(lineConfig), (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
 	console.log(`listening on ${port}`);
 });
-
-// case 5: //小雷+啟動炸彈
-// 	return replyText(replyToken, [ `炸彈已啟動  請在YYYY/MM/DD HH:mm 之前解除炸彈`, `God bless you.` ]);
-// case 17: //小雷+我要參加
-// 	return client.replyMessage(replyToken, {
-// 		type: 'template',
-// 		altText: 'This is a buttons template',
-// 		template: {
-// 			type: 'buttons',
-// 			title: 'Menu',
-// 			text: 'Please select',
-// 			defaultAction: {
-// 				type: 'uri',
-// 				label: 'View detail',
-// 				uri: 'http://example.com/page/123'
-// 			},
-// 			actions: [
-// 				{
-// 					type: 'uri',
-// 					label: '設置信用卡',
-// 					uri: 'http://example.com/page/123'
-// 				},
-// 				{
-// 					type: 'postback',
-// 					label: '設置信用卡',
-// 					data: 'action=buy&itemid=123'
-// 				}
-// 			]
-// 		}
-// 	});
-// {
-// 	type: 'text',
-// 	text: 'Select Datetime!',
-// 	quickReply: {
-// 		items: [
-// 			{
-// 				type: 'action',
-// 				action: { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' }
-// 			}
-// 		]
-// 	}
-// }
-// {
-// 	type: 'template',
-// 	altText: 'Datetime pickers alt text',
-// 	template: {
-// 		type: 'buttons',
-// 		text: 'Select date / time !',
-// 		actions: [ { type: 'datetimepicker', label: 'Datetime', data: 'DATETIME', mode: 'datetime' } ]
-// 	}
-// }
-// { type: 'location', label: 'Send location' }
-// return client.replyMessage(event.replyToken, {
-// 	type: 'text',
-// 	text: '請輸入 日期 時間 地點(Optional)\n2018/10/04 10:30 西門捷運站'
-// });
-// 'source:' + JSON.stringify(source) + '，profile: ' + JSON.stringify(profile)
