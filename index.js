@@ -220,7 +220,7 @@ async function handleBomb(bomb) {
 	bomb.save({ state: 'FINISHED' });
 }
 
-catchProfil = async (source, replyToken) => {
+async function catchProfil(source, replyToken) {
 	const profile = await getProfile(source);
 	{
 		// console.log('Profile:', beautify(profile, null, 2, 80));
@@ -237,9 +237,9 @@ catchProfil = async (source, replyToken) => {
 	await channel.join(user);
 
 	return { channel, user };
-};
+}
 
-getProfile = async (source) => {
+async function getProfile(source) {
 	const { type, userId, roomId, groupId } = source;
 	const key = roomId || groupId;
 	switch (type) {
@@ -250,7 +250,7 @@ getProfile = async (source) => {
 		case 'group':
 			return await client.getGroupMemberProfile(key, userId);
 	}
-};
+}
 
 function typing(cmd) {
 	var result = 0;
