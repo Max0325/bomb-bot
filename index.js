@@ -4,8 +4,8 @@ const _ = require('lodash');
 const moment = require('moment');
 const beautify = require('json-beautify');
 const schedule = require('node-schedule');
-const core = require('./lib');
-
+const Core = require('./lib');
+const core = new Core();
 console.log('core:', core);
 
 const lineConfig = {
