@@ -220,7 +220,7 @@ async function handleBomb(bomb) {
 	bomb.save({ state: 'FINISHED' });
 }
 
-async function catchProfil(source, replyToken) {
+async function catchProfile(source, replyToken) {
 	const profile = await getProfile(source);
 	{
 		// console.log('Profile:', beautify(profile, null, 2, 80));
