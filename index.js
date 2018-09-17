@@ -134,8 +134,8 @@ async function handleText(info, message, replyToken, source) {
 					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30'
 				});
 			}
-
-			await core.setupBomb(channel);
+			const timestamp = +moment(_.drop(cmds).join('T'));
+			await core.setupBomb(channel, timestamp);
 
 			return client.replyMessage(replyToken, [
 				{
