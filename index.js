@@ -135,7 +135,7 @@ async function handleText(info, message, replyToken, source) {
 				});
 			}
 			const timestamp = +moment(_.drop(cmds).join('T'));
-			await core.setupBomb(channel, timestamp);
+			await core.setupBomb(channel, user, timestamp);
 
 			return client.replyMessage(replyToken, [
 				{
