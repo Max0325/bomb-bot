@@ -4,8 +4,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const beautify = require('json-beautify');
 const schedule = require('node-schedule');
-
-import Core from './lib';
+const core = require('./lib');
 
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
@@ -28,7 +27,7 @@ async function handleEvent(event) {
 	// console.log(beautify(event, null, 2, 80));
 
 	const { type, source, replyToken, message } = event;
-	const info = await Core.catchProfile(source, replyToken);
+	const info = await core.catchProfile(source, replyToken);
 
 	switch (type) {
 		case 'message':
@@ -94,7 +93,7 @@ async function handleText(info, message, replyToken, source) {
 		case 1: {
 			//小雷
 			const columns = [];
-			const bomb = await Core.findBomb(channel, [ 'INIT', 'STARTED' ]);
+			const bomb = await core.findBomb(channel, [ 'INIT', 'STARTED' ]);
 			if (bomb) {
 				const { owner, state, timestamp } = bomb.toJSON();
 				const ownerName = owner.displayName;
@@ -136,7 +135,7 @@ async function handleText(info, message, replyToken, source) {
 				});
 			}
 
-			await Core.setupBomb(channel);
+			await core.setupBomb(channel);
 
 			return client.replyMessage(replyToken, [
 				{
@@ -157,7 +156,7 @@ async function handleText(info, message, replyToken, source) {
 		}
 		case 5: {
 			//小雷+啟動炸彈
-			const bomb = await Core.findBomb(channel);
+			const bomb = await core.findBomb(channel);
 			const owner = bomb.get('owner');
 			const ownerName = owner.get('displayName');
 			const { objectId, state, timestamp } = bomb.toJSON();
@@ -192,7 +191,7 @@ async function handleText(info, message, replyToken, source) {
 		}
 		case 17: {
 			//小雷+我要參加
-			let bomb = await Core.findBomb(channel, [ 'STARTED' ]);
+			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
 
 			bomb = await bomb.join(user);
 
@@ -227,13 +226,13 @@ catchProfil = async (source, replyToken) => {
 		// console.log('Profile:', beautify(profile, null, 2, 80));
 	}
 
-	let user = (await Core.findUser(profile.userId)) || new SpeUser();
+	let user = (await core.findUser(profile.userId)) || new SpeUser();
 	{
 		user = await user.save(profile);
 		// console.log('User:', beautify(user, null, 2, 80));
 	}
 
-	let channel = await Core.registerChannel(source, replyToken);
+	let channel = await core.registerChannel(source, replyToken);
 
 	await channel.join(user);
 
