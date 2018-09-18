@@ -1,4 +1,4 @@
-import line from '@line/bot-sdk';
+import { Client } from '@line/bot-sdk';
 import express from 'express';
 import _ from 'lodash';
 import moment from 'moment';
@@ -12,7 +12,7 @@ const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
 	channelSecret: process.env.HEROKU_LINE_CHANNEL_SECRET
 };
-const client = new line.Client(lineConfig);
+const client = new Client(lineConfig);
 const app = express();
 
 const replyText = (token, texts) => {
