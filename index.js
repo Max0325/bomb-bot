@@ -159,7 +159,7 @@ async function handleText(info, message, replyToken, source) {
 			const bomb = await core.findBomb(channel);
 			const owner = bomb.get('owner');
 			const ownerName = owner.get('displayName');
-			const { objectId, state, timestamp } = bomb.toJSON();
+			const { state, timestamp } = bomb.toJSON();
 			if (state === 'STARTED') {
 				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
 			}
@@ -194,14 +194,16 @@ async function handleText(info, message, replyToken, source) {
 			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
 			bomb = await bomb.join(user);
 			const players = await bomb.getPlayers();
-			return replyText(replyToken, `參加的人：\n${players.map((user) => user.get('displayName')).join('\n')}`);
+			return replyText(replyToken, `參加的人：\n${_.map(players, 'displayName').join('\n')}`);
 		}
 		case 33: {
 			//小雷+抓到炸彈魔
 			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
 			bomb = await bomb.inactivate(user);
-			const activatePlayers = await bomb.getActivatePlayers();
-			return replyText(replyToken, `尚未拆彈：\n${activatePlayers.map((user) => user.get('displayName')).join(', ')}`);
+			const texts = [ `${user.displayName}}已解除炸彈` ];
+			const activate = await bomb.getActivatePlayers();
+			!_.isEmpty(activate) && texts.push(`尚未拆彈：\n${_.map(activate, 'displayName').join(', ')}`);
+			return replyText(replyToken, texts);
 		}
 	}
 }
