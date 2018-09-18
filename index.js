@@ -195,6 +195,9 @@ async function handleText(info, message, replyToken, source) {
 			if (!bomb) {
 				return replyText(replyToken, [ 'Rex：三小啦', `沒有炸彈了！！` ]);
 			}
+			if (await bomb.isJoined(user)) {
+				return replyText(replyToken, [ 'Rex：三小啦', `你已經參加了！！` ]);
+			}
 			bomb = await bomb.join(user);
 			const players = await bomb.getPlayers();
 			return replyText(replyToken, `參加的人：\n${_.map(players, 'displayName').join('\n')}`);
