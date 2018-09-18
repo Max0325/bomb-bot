@@ -253,12 +253,13 @@ async function getProfile(source) {
 
 function typing(cmd) {
 	var result = 0;
-	cmd.indexOf('小雷') == 0 && (result += 1 << 0); //1
-	cmd.includes('裝炸彈') && (result += 1 << 1); //2
-	cmd.includes('啟動炸彈') && (result += 1 << 2); //4
-	cmd.includes('吃大便') && (result += 1 << 3); //8
-	cmd.includes('我要參加') && (result += 1 << 4); //16
-	cmd.includes('抓到炸彈魔') && (result += 1 << 5); //32
+	cmd.indexOf('小雷') == 0 && (result |= 1 << 0); //1
+	cmd.includes('裝炸彈') && (result |= 1 << 1); //2
+	cmd.includes('啟動炸彈') && (result |= 1 << 2); //4
+	cmd.includes('吃大便') && (result |= 1 << 3); //8
+	cmd.includes('我要參加') && (result |= 1 << 4); //16
+	cmd.includes('抓到炸彈魔') && (result |= 1 << 5); //32
+	cmd.indexOf('系統指令') == 0 && cmd.includes('ID:小雷') && (result |= 1 << 6); //64
 	return result;
 }
 
