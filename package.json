@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"devDependencies": {},
 	"scripts": {
-		"start": "babel-node --presets es2015 index.js"
+		"start": "babel-node index.js"
 	},
 	"author": "",
 	"license": "ISC",
