@@ -277,11 +277,12 @@ async function handleBomb(bomb) {
 								text: '成功解除',
 								size: 'xs',
 								color: '#aaaaaa',
+								margin: 'xxl',
 								wrap: true
 							},
 							{
 								type: 'separator',
-								margin: 'xxl'
+								margin: 'xs'
 							},
 							...inactivate.map((situation) => ({
 								type: 'box',
@@ -308,11 +309,12 @@ async function handleBomb(bomb) {
 								text: '陣亡',
 								size: 'xs',
 								color: '#aaaaaa',
+								margin: 'xxl',
 								wrap: true
 							},
 							{
 								type: 'separator',
-								margin: 'xxl'
+								margin: 'xs'
 							},
 							...activate.map((situation) => ({
 								type: 'box',
