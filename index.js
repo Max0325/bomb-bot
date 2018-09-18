@@ -1,4 +1,4 @@
-import { Client } from '@line/bot-sdk';
+import { Client, middleware } from '@line/bot-sdk';
 import express from 'express';
 import _ from 'lodash';
 import moment from 'moment';
@@ -264,7 +264,7 @@ function typing(cmd) {
 	return result;
 }
 
-app.post('/', line.middleware(lineConfig), (req, res) => {
+app.post('/', middleware(lineConfig), (req, res) => {
 	Promise.all(req.body.events.map(handleEvent)).then(function(result) {
 		res.json(result);
 	});
