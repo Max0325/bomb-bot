@@ -1,11 +1,9 @@
-const line = require('@line/bot-sdk');
-const express = require('express');
-const _ = require('lodash');
-const moment = require('moment');
-const beautify = require('json-beautify');
-const schedule = require('node-schedule');
-// const core = require('./lib');
-
+import line from '@line/bot-sdk';
+import express from 'express';
+import _ from 'lodash';
+import moment from 'moment';
+import beautify from 'json-beautify';
+import schedule from 'node-schedule';
 import core from './lib';
 
 console.log(core);
