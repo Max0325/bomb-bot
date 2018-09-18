@@ -233,9 +233,11 @@ async function handleBomb(bomb) {
 	await pushText(key, [ `要爆了～`, `啊～～～` ]);
 	const results = await bomb.end();
 	const situations = _.map(results, (obj) => obj.toJSON());
-	console.log('situations:', beautify(situations, null, 2, 80));
+	// console.log('situations:', beautify(situations, null, 2, 80));
 	const inactivate = _(situations).filter('inactivate').orderBy('inactivate');
 	const activate = _(situations).reject('inactivate');
+	console.log('inactivate:', beautify(inactivate, null, 2, 80));
+	console.log('activate:', beautify(activate, null, 2, 80));
 	await client.pushMessage(key, {
 		type: 'flex',
 		altText: 'This is a Flex Message',
