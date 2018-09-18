@@ -192,12 +192,16 @@ async function handleText(info, message, replyToken, source) {
 		case 17: {
 			//小雷+我要參加
 			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
-
 			bomb = await bomb.join(user);
-
 			const players = await bomb.getPlayers();
-
 			return replyText(replyToken, `參加的人：\n${players.map((user) => user.get('displayName')).join('\n')}`);
+		}
+		case 33: {
+			//小雷+抓到炸彈魔
+			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
+			bomb = await bomb.inactivate(user);
+			const activatePlayers = await bomb.getActivatePlayers();
+			return replyText(replyToken, `尚未拆彈：\n${activatePlayers.map((user) => user.get('displayName')).join(', ')}`);
 		}
 	}
 }
@@ -247,11 +251,12 @@ async function getProfile(source) {
 
 function typing(cmd) {
 	var result = 0;
-	cmd.includes('小雷') && (result += Math.pow(2, 0)); //1
-	cmd.includes('裝炸彈') && (result += Math.pow(2, 1)); //2
-	cmd.includes('啟動炸彈') && (result += Math.pow(2, 2)); //4
-	cmd.includes('吃大便') && (result += Math.pow(2, 3)); //8
-	cmd.includes('我要參加') && (result += Math.pow(2, 4)); //16
+	cmd.indexOf('小雷') == 0 && (result += 1 << 0); //1
+	cmd.includes('裝炸彈') && (result += 1 << 1); //2
+	cmd.includes('啟動炸彈') && (result += 1 << 2); //4
+	cmd.includes('吃大便') && (result += 1 << 3); //8
+	cmd.includes('我要參加') && (result += 1 << 4); //16
+	cmd.includes('抓到炸彈魔') && (result += 1 << 5); //32
 	return result;
 }
 
