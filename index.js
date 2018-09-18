@@ -200,7 +200,7 @@ async function handleText(info, message, replyToken, source) {
 			//小雷+抓到炸彈魔
 			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
 			bomb = await bomb.inactivate(user);
-			const texts = [ `${user.displayName}}已解除炸彈` ];
+			const texts = [ `${user.displayName}已解除炸彈` ];
 			const activate = await bomb.getActivatePlayers();
 			!_.isEmpty(activate) && texts.push(`尚未拆彈：\n${_.map(activate, 'displayName').join(', ')}`);
 			return replyText(replyToken, texts);
