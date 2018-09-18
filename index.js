@@ -234,6 +234,8 @@ async function handleBomb(bomb) {
 	const results = await bomb.end();
 	const situations = _.map(results, (obj) => obj.toJSON());
 	console.log('situations:', beautify(situations, null, 2, 80));
+	const inactivate = _(situations).filter('inactivate').orderBy('inactivate');
+	const activate = _(situations).reject('inactivate');
 	await client.pushMessage(key, {
 		type: 'flex',
 		altText: 'This is a Flex Message',
@@ -277,7 +279,14 @@ async function handleBomb(bomb) {
 						margin: 'xxl',
 						spacing: 'sm',
 						contents: [
-							..._(situations).filter('inactivate').orderBy('inactivate').map((situation) => ({
+							{
+								type: 'text',
+								text: '成功解除',
+								size: 'xs',
+								color: '#aaaaaa',
+								wrap: true
+							},
+							...inactivate.map((situation) => ({
 								type: 'box',
 								layout: 'horizontal',
 								contents: [
@@ -300,7 +309,34 @@ async function handleBomb(bomb) {
 							{
 								type: 'separator',
 								margin: 'xxl'
-							}
+							},
+							{
+								type: 'text',
+								text: '陣亡',
+								size: 'xs',
+								color: '#aaaaaa',
+								wrap: true
+							},
+							...activate.map((situation) => ({
+								type: 'box',
+								layout: 'horizontal',
+								contents: [
+									{
+										type: 'text',
+										text: situation.player.displayName,
+										size: 'sm',
+										color: '#555555',
+										flex: 0
+									},
+									{
+										type: 'text',
+										text: '',
+										size: 'sm',
+										color: '#111111',
+										align: 'end'
+									}
+								]
+							}))
 						]
 					}
 				]
