@@ -226,9 +226,10 @@ async function handleBomb(bomb) {
 	const { key } = channel;
 
 	pushText(key, [ `要爆了～`, `啊～～～` ]);
-	const results = await bomb.end().forEach((result) => result.toJSON());
-	console.log(results);
-	client.pushMessage(key, {
+	const results = await bomb.end();
+	const situations = results.forEach((result) => result.toJSON());
+	console.log(situations);
+	await client.pushMessage(key, {
 		type: 'bubble',
 		styles: {
 			footer: {
@@ -270,20 +271,20 @@ async function handleBomb(bomb) {
 					margin: 'xxl',
 					spacing: 'sm',
 					contents: [
-						..._(results).filter('inactivate').orderBy('inactivate').map((r) => ({
+						..._(situations).filter('inactivate').orderBy('inactivate').map((situation) => ({
 							type: 'box',
 							layout: 'horizontal',
 							contents: [
 								{
 									type: 'text',
-									text: r.player.displayName,
+									text: situation.player.displayName,
 									size: 'sm',
 									color: '#555555',
 									flex: 0
 								},
 								{
 									type: 'text',
-									text: moment(r.inactivate).format('HH:mm:ss'),
+									text: moment(situation.inactivate).format('HH:mm:ss'),
 									size: 'sm',
 									color: '#111111',
 									align: 'end'
