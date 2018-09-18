@@ -208,6 +208,11 @@ async function handleText(info, message, replyToken, source) {
 			!_.isEmpty(activate) && texts.push(`尚未拆彈：\n${_.map(activate, 'displayName').join(', ')}`);
 			return replyText(replyToken, texts);
 		}
+		case 192: {
+			//系統指令+ID:小雷+爆炸
+			const bomb = await core.findBomb(channel);
+			await handleBomb(bomb);
+		}
 	}
 }
 
@@ -228,13 +233,11 @@ async function handleBomb(bomb) {
 	pushText(key, [ `要爆了～`, `啊～～～` ]);
 	const results = await bomb.end();
 	const situations = results.forEach((result) => result.toJSON());
-	console.log(situations);
+	console.log('situations:', situations);
 	await client.pushMessage(key, {
 		type: 'bubble',
 		styles: {
-			footer: {
-				separator: true
-			}
+			footer: { separator: true }
 		},
 		body: {
 			type: 'box',
@@ -336,6 +339,7 @@ function typing(cmd) {
 	cmd.includes('我要參加') && (result |= 1 << 4); //16
 	cmd.includes('抓到炸彈魔') && (result |= 1 << 5); //32
 	cmd.indexOf('系統指令') == 0 && cmd.includes('ID:小雷') && (result |= 1 << 6); //64
+	cmd.includes('爆炸') && (result |= 1 << 7); //128
 	return result;
 }
 
