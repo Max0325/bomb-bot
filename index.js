@@ -210,8 +210,8 @@ async function handleText(info, message, replyToken, source) {
 		}
 		case 192: {
 			//系統指令+ID:小雷+爆炸
-			const bomb = await core.findBomb(channel);
-			await handleBomb(bomb);
+			// const bomb = await core.findBomb(channel);
+			await handleBomb();
 		}
 	}
 }
@@ -227,13 +227,13 @@ function handleLocation(message, replyToken) {
 }
 
 async function handleBomb(bomb) {
-	const { channel } = bomb.toJSON();
-	const { key } = channel;
+	// const { channel } = bomb.toJSON();
+	// const { key } = channel;
 
-	// pushText(key, [ `要爆了～`, `啊～～～` ]);
-	const results = await bomb.end();
-	const situations = _.map(results, (obj) => obj.toJSON());
-	console.log('situations:', situations);
+	// // pushText(key, [ `要爆了～`, `啊～～～` ]);
+	// const results = await bomb.end();
+	// const situations = _.map(results, (obj) => obj.toJSON());
+	// console.log('situations:', situations);
 	client.pushMessage(key, {
 		type: 'bubble',
 		body: {
