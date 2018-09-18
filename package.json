@@ -12,7 +12,7 @@
 		"babel-preset-env": "1.6.0"
 	},
 	"scripts": {
-		"start": "babel-node --presets node6 index.js"
+		"start": "babel-node --presets es2015 index.js"
 	},
 	"author": "",
 	"license": "ISC",
