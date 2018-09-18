@@ -4,7 +4,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import beautify from 'json-beautify';
 import schedule from 'node-schedule';
-import core from '../lib';
+import core from './lib';
 
 console.log(core);
 
