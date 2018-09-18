@@ -331,7 +331,7 @@ async function handleBomb(bomb) {
 									},
 									{
 										type: 'text',
-										text: '',
+										text: situation.objectId,
 										size: 'sm',
 										color: '#111111',
 										align: 'end'
