@@ -250,25 +250,25 @@ async function handleBomb(bomb) {
 				contents: [
 					{
 						type: 'text',
-						text: 'RECEIPT',
+						text: '時計報告書',
 						weight: 'bold',
 						color: '#1DB446',
 						size: 'sm'
 					},
 					{
 						type: 'text',
-						text: 'Brown Store',
+						text: '排行榜',
 						weight: 'bold',
 						size: 'xxl',
 						margin: 'md'
 					},
-					{
-						type: 'text',
-						text: 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
-						size: 'xs',
-						color: '#aaaaaa',
-						wrap: true
-					},
+					// {
+					// 	type: 'text',
+					// 	text: 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
+					// 	size: 'xs',
+					// 	color: '#aaaaaa',
+					// 	wrap: true
+					// },
 					{
 						type: 'separator',
 						margin: 'xxl'
@@ -285,6 +285,10 @@ async function handleBomb(bomb) {
 								size: 'xs',
 								color: '#aaaaaa',
 								wrap: true
+							},
+							{
+								type: 'separator',
+								margin: 'xxl'
 							},
 							...inactivate.map((situation) => ({
 								type: 'box',
@@ -307,15 +311,15 @@ async function handleBomb(bomb) {
 								]
 							})),
 							{
-								type: 'separator',
-								margin: 'xxl'
-							},
-							{
 								type: 'text',
 								text: '陣亡',
 								size: 'xs',
 								color: '#aaaaaa',
 								wrap: true
+							},
+							{
+								type: 'separator',
+								margin: 'xxl'
 							},
 							...activate.map((situation) => ({
 								type: 'box',
