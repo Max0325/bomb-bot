@@ -265,10 +265,6 @@ async function handleBomb(bomb) {
 						margin: 'md'
 					},
 					{
-						type: 'separator',
-						margin: 'xxl'
-					},
-					{
 						type: 'box',
 						layout: 'vertical',
 						margin: 'xxl',
