@@ -192,6 +192,9 @@ async function handleText(info, message, replyToken, source) {
 		case 17: {
 			//小雷+我要參加
 			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
+			if (!bomb) {
+				return replyText(replyToken, [ 'Rex：三小啦', `沒有炸彈了！！` ]);
+			}
 			bomb = await bomb.join(user);
 			const players = await bomb.getPlayers();
 			return replyText(replyToken, `參加的人：\n${_.map(players, 'displayName').join('\n')}`);
@@ -223,7 +226,79 @@ async function handleBomb(bomb) {
 	const { key } = channel;
 
 	pushText(key, [ `要爆了～`, `啊～～～` ]);
-	bomb.end();
+	const results = await bomb.end().forEach((result) => result.toJSON());
+	console.log(results);
+	client.pushMessage(key, {
+		type: 'bubble',
+		styles: {
+			footer: {
+				separator: true
+			}
+		},
+		body: {
+			type: 'box',
+			layout: 'vertical',
+			contents: [
+				{
+					type: 'text',
+					text: 'RECEIPT',
+					weight: 'bold',
+					color: '#1DB446',
+					size: 'sm'
+				},
+				{
+					type: 'text',
+					text: 'Brown Store',
+					weight: 'bold',
+					size: 'xxl',
+					margin: 'md'
+				},
+				{
+					type: 'text',
+					text: 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
+					size: 'xs',
+					color: '#aaaaaa',
+					wrap: true
+				},
+				{
+					type: 'separator',
+					margin: 'xxl'
+				},
+				{
+					type: 'box',
+					layout: 'vertical',
+					margin: 'xxl',
+					spacing: 'sm',
+					contents: [
+						..._(results).filter('inactivate').orderBy('inactivate').map((r) => ({
+							type: 'box',
+							layout: 'horizontal',
+							contents: [
+								{
+									type: 'text',
+									text: r.player.displayName,
+									size: 'sm',
+									color: '#555555',
+									flex: 0
+								},
+								{
+									type: 'text',
+									text: moment(r.inactivate).format('HH:mm:ss'),
+									size: 'sm',
+									color: '#111111',
+									align: 'end'
+								}
+							]
+						})),
+						{
+							type: 'separator',
+							margin: 'xxl'
+						}
+					]
+				}
+			]
+		}
+	});
 }
 
 async function catchProfile(source) {
