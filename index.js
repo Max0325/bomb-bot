@@ -166,7 +166,7 @@ async function handleText(info, message, replyToken, source) {
 			if (!user.equals(owner)) {
 				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${ownerName} 啟動個屁啊！！` ]);
 			}
-			await bomb.save({ state: 'STARTED' });
+			await bomb.start();
 
 			const date = moment(timestamp).toDate();
 			const handler = _.bind(handleBomb, null, bomb);
@@ -217,7 +217,7 @@ async function handleBomb(bomb) {
 	const { key } = channel;
 
 	pushText(key, [ `要爆了～`, `啊～～～` ]);
-	bomb.save({ state: 'FINISHED' });
+	bomb.end();
 }
 
 async function catchProfile(source, replyToken) {
