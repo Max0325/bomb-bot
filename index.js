@@ -6,8 +6,6 @@ import beautify from 'json-beautify';
 import schedule from 'node-schedule';
 import core from './lib';
 
-console.log(core);
-
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
 	channelSecret: process.env.HEROKU_LINE_CHANNEL_SECRET
