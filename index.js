@@ -230,26 +230,78 @@ async function handleBomb(bomb) {
 	const { channel } = bomb.toJSON();
 	const { key } = channel;
 
-	// pushText(key, [ `要爆了～`, `啊～～～` ]);
+	await pushText(key, [ `要爆了～`, `啊～～～` ]);
 	const results = await bomb.end();
 	const situations = _.map(results, (obj) => obj.toJSON());
 	console.log('situations:', situations);
-	client.pushMessage(key, {
+	await client.pushMessage(key, {
 		type: 'flex',
 		altText: 'This is a Flex Message',
 		contents: {
 			type: 'bubble',
+			styles: {
+				footer: { separator: true }
+			},
 			body: {
 				type: 'box',
-				layout: 'horizontal',
+				layout: 'vertical',
 				contents: [
 					{
 						type: 'text',
-						text: 'Hello,'
+						text: 'RECEIPT',
+						weight: 'bold',
+						color: '#1DB446',
+						size: 'sm'
 					},
 					{
 						type: 'text',
-						text: 'World!'
+						text: 'Brown Store',
+						weight: 'bold',
+						size: 'xxl',
+						margin: 'md'
+					},
+					{
+						type: 'text',
+						text: 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
+						size: 'xs',
+						color: '#aaaaaa',
+						wrap: true
+					},
+					{
+						type: 'separator',
+						margin: 'xxl'
+					},
+					{
+						type: 'box',
+						layout: 'vertical',
+						margin: 'xxl',
+						spacing: 'sm',
+						contents: [
+							..._(situations).filter('inactivate').orderBy('inactivate').map((situation) => ({
+								type: 'box',
+								layout: 'horizontal',
+								contents: [
+									{
+										type: 'text',
+										text: situation.player.displayName,
+										size: 'sm',
+										color: '#555555',
+										flex: 0
+									},
+									{
+										type: 'text',
+										text: moment(situation.inactivate).format('HH:mm:ss'),
+										size: 'sm',
+										color: '#111111',
+										align: 'end'
+									}
+								]
+							})),
+							{
+								type: 'separator',
+								margin: 'xxl'
+							}
+						]
 					}
 				]
 			}
@@ -306,73 +358,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log(`listening on ${port}`);
 });
-
-// {
-// 	type: 'bubble',
-// 	styles: {
-// 		footer: { separator: true }
-// 	},
-// 	body: {
-// 		type: 'box',
-// 		layout: 'vertical',
-// 		contents: [
-// 			{
-// 				type: 'text',
-// 				text: 'RECEIPT',
-// 				weight: 'bold',
-// 				color: '#1DB446',
-// 				size: 'sm'
-// 			},
-// 			{
-// 				type: 'text',
-// 				text: 'Brown Store',
-// 				weight: 'bold',
-// 				size: 'xxl',
-// 				margin: 'md'
-// 			},
-// 			{
-// 				type: 'text',
-// 				text: 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
-// 				size: 'xs',
-// 				color: '#aaaaaa',
-// 				wrap: true
-// 			},
-// 			{
-// 				type: 'separator',
-// 				margin: 'xxl'
-// 			},
-// 			{
-// 				type: 'box',
-// 				layout: 'vertical',
-// 				margin: 'xxl',
-// 				spacing: 'sm',
-// 				contents: [
-// 					..._(situations).filter('inactivate').orderBy('inactivate').map((situation) => ({
-// 						type: 'box',
-// 						layout: 'horizontal',
-// 						contents: [
-// 							{
-// 								type: 'text',
-// 								text: situation.player.displayName,
-// 								size: 'sm',
-// 								color: '#555555',
-// 								flex: 0
-// 							},
-// 							{
-// 								type: 'text',
-// 								text: moment(situation.inactivate).format('HH:mm:ss'),
-// 								size: 'sm',
-// 								color: '#111111',
-// 								align: 'end'
-// 							}
-// 						]
-// 					})),
-// 					{
-// 						type: 'separator',
-// 						margin: 'xxl'
-// 					}
-// 				]
-// 			}
-// 		]
-// 	}
-// }
