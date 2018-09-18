@@ -27,7 +27,7 @@ async function handleEvent(event) {
 	// console.log(beautify(event, null, 2, 80));
 
 	const { type, source, replyToken, message } = event;
-	const info = await catchProfile(source, replyToken);
+	const info = await catchProfile(source);
 
 	switch (type) {
 		case 'message':
@@ -220,19 +220,12 @@ async function handleBomb(bomb) {
 	bomb.end();
 }
 
-async function catchProfile(source, replyToken) {
+async function catchProfile(source) {
 	const profile = await getProfile(source);
-	{
-		// console.log('Profile:', beautify(profile, null, 2, 80));
-	}
 
-	let user = (await core.findUser(profile.userId)) || new SpeUser();
-	{
-		user = await user.save(profile);
-		// console.log('User:', beautify(user, null, 2, 80));
-	}
+	const user = await core.registerUser(profile);
 
-	let channel = await core.registerChannel(source, replyToken);
+	const channel = await core.registerChannel(source);
 
 	await channel.join(user);
 
