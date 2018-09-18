@@ -262,13 +262,6 @@ async function handleBomb(bomb) {
 						size: 'xxl',
 						margin: 'md'
 					},
-					// {
-					// 	type: 'text',
-					// 	text: 'Miraina Tower, 4-1-6 Shinjuku, Tokyo',
-					// 	size: 'xs',
-					// 	color: '#aaaaaa',
-					// 	wrap: true
-					// },
 					{
 						type: 'separator',
 						margin: 'xxl'
