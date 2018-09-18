@@ -5,8 +5,7 @@
 	"main": "index.js",
 	"devDependencies": {
 		"babel-cli": "6.26.0",
-		"babel-preset-node6": "11.0.0",
-		"babel-preset-env": "1.6.0"
+		"babel-preset-node6": "11.0.0"
 	},
 	"scripts": {
 		"start": "babel-node --presets node6 index.js"
