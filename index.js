@@ -232,6 +232,7 @@ async function handleBomb(bomb) {
 
 	pushText(key, [ `要爆了～`, `啊～～～` ]);
 	const results = await bomb.end();
+	console.log('results:', results);
 	const situations = results.forEach((result) => result.toJSON());
 	console.log('situations:', situations);
 	await client.pushMessage(key, {
