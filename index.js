@@ -4,7 +4,11 @@ const _ = require('lodash');
 const moment = require('moment');
 const beautify = require('json-beautify');
 const schedule = require('node-schedule');
-const core = require('./lib');
+// const core = require('./lib');
+
+import core from './lib';
+
+console.log(core);
 
 const lineConfig = {
 	channelAccessToken: process.env.HEROKU_LINE_CHANNEL_ACCESS_TOKEN,
