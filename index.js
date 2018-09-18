@@ -230,12 +230,12 @@ async function handleBomb(bomb) {
 	const { channel } = bomb.toJSON();
 	const { key } = channel;
 
-	pushText(key, [ `要爆了～`, `啊～～～` ]);
+	// pushText(key, [ `要爆了～`, `啊～～～` ]);
 	const results = await bomb.end();
 	console.log('results:', results);
 	const situations = _.map(results, (obj) => obj.toJSON());
 	console.log('situations:', situations);
-	await client.pushMessage(key, {
+	client.pushMessage(key, {
 		type: 'bubble',
 		styles: {
 			footer: {
