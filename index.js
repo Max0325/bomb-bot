@@ -102,7 +102,7 @@ async function handleText(info, message, replyToken, source) {
 				state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
 				const text = `發起人：${ownerName}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
 				columns.push({
-					thumbnailImageUrl: "https://wiki.komica.org/images/thumb/b/b2/Img1858.jpg/450px-Img1858.jpg",
+					thumbnailImageUrl: "https://scontent.ftpe8-4.fna.fbcdn.net/v/t1.0-9/41662428_2094855860830973_8167305729854668800_n.jpg?_nc_cat=100&oh=8a57b9df785fd0162992fcf356da6afd&oe=5C27E3B9",
 					imageAspectRatio: "rectangle",
 					imageSize: "cover",
 					imageBackgroundColor: "#FFFFFF",
@@ -113,6 +113,10 @@ async function handleText(info, message, replyToken, source) {
 			columns.push({
 				title: '工具包',
 				text: '各種操作',
+				thumbnailImageUrl: "https://wiki.komica.org/images/thumb/b/b2/Img1858.jpg/450px-Img1858.jpg",
+				imageAspectRatio: "rectangle",
+				imageSize: "cover",
+				imageBackgroundColor: "#FFFFFF",
 				actions: [
 					{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
 					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
