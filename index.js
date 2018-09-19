@@ -14,12 +14,12 @@ const client = new Client(lineConfig);
 const app = express();
 
 const replyText = (token, texts) => {
-	texts = Array.isArray(texts) ? texts : [ texts ];
+	texts = Array.isArray(texts) ? texts : [texts];
 	return client.replyMessage(token, texts.map((text) => ({ type: 'text', text })));
 };
 
 const pushText = (to, texts) => {
-	texts = Array.isArray(texts) ? texts : [ texts ];
+	texts = Array.isArray(texts) ? texts : [texts];
 	return client.pushMessage(to, texts.map((text) => ({ type: 'text', text })));
 };
 
@@ -93,19 +93,30 @@ async function handleText(info, message, replyToken, source) {
 		case 1: {
 			//小雷
 			const columns = [];
-			const bomb = await core.findBomb(channel, [ 'INIT', 'STARTED' ]);
+			const bomb = await core.findBomb(channel, ['INIT', 'STARTED']);
 			if (bomb) {
 				const { owner, state, timestamp } = bomb.toJSON();
 				const ownerName = owner.displayName;
-				const actions = [ { label: '下注', type: 'uri', uri: 'https://line.me' } ];
+				const actions = [{ label: '下注', type: 'uri', uri: 'https://line.me' }];
 				state === 'INIT' && actions.push({ label: '啟動炸彈', type: 'message', text: '小雷啟動炸彈' });
 				state === 'STARTED' && actions.push({ label: '我要參加', type: 'message', text: '小雷我要參加' });
 				const text = `發起人：${ownerName}\n引爆時間：${moment(timestamp).format('YYYY-MM-DD HH:mm')}`;
-				columns.push({ title: '炸彈狀態', text, actions });
+				columns.push({
+					thumbnailImageUrl: "https://scontent.ftpe8-4.fna.fbcdn.net/v/t1.0-9/41662428_2094855860830973_8167305729854668800_n.jpg?_nc_cat=100&oh=8a57b9df785fd0162992fcf356da6afd&oe=5C27E3B9",
+					imageAspectRatio: "rectangle",
+					imageSize: "cover",
+					imageBackgroundColor: "#FFFFFF",
+					title: '炸彈狀態',
+					text, actions
+				});
 			}
 			columns.push({
 				title: '工具包',
 				text: '各種操作',
+				thumbnailImageUrl: "https://wiki.komica.org/images/thumb/b/b2/Img1858.jpg/450px-Img1858.jpg",
+				imageAspectRatio: "rectangle",
+				imageSize: "cover",
+				imageBackgroundColor: "#FFFFFF",
 				actions: [
 					{ label: '裝炸彈', type: 'datetimepicker', data: 'DATETIME', mode: 'datetime' },
 					{ label: '拆炸彈', type: 'postback', data: 'action=removeBomb', text: '解除炸彈' }
@@ -120,7 +131,7 @@ async function handleText(info, message, replyToken, source) {
 		case 9: {
 			//小雷+吃大便
 			const profile = await client.getProfile(source.userId);
-			return replyText(replyToken, [ `${beautify(profile, null, 2, 25)}`, `${beautify(source, null, 2, 25)}` ]);
+			return replyText(replyToken, [`${beautify(profile, null, 2, 25)}`, `${beautify(source, null, 2, 25)}`]);
 		}
 		case 3: {
 			//小雷+裝炸彈
@@ -158,10 +169,10 @@ async function handleText(info, message, replyToken, source) {
 			const ownerName = owner.get('displayName');
 			const { state, timestamp } = bomb.toJSON();
 			if (state === 'STARTED') {
-				return replyText(replyToken, [ 'Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！` ]);
+				return replyText(replyToken, ['Rex：白癡喔！！', `炸彈已經啟動～ 趕快參加吧！！`]);
 			}
 			if (!user.equals(owner)) {
-				return replyText(replyToken, [ 'Rex：三小啦', `你又不是${ownerName} 啟動個屁啊！！` ]);
+				return replyText(replyToken, ['Rex：三小啦', `你又不是${ownerName} 啟動個屁啊！！`]);
 			}
 			await bomb.start();
 
@@ -188,12 +199,12 @@ async function handleText(info, message, replyToken, source) {
 		}
 		case 17: {
 			//小雷+我要參加
-			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
+			let bomb = await core.findBomb(channel, ['STARTED']);
 			if (!bomb) {
-				return replyText(replyToken, [ 'Rex：三小啦', `沒有炸彈了！！` ]);
+				return replyText(replyToken, ['Rex：三小啦', `沒有炸彈了！！`]);
 			}
 			if (await bomb.isJoined(user)) {
-				return replyText(replyToken, [ 'Rex：三小啦', `你已經參加了！！` ]);
+				return replyText(replyToken, ['Rex：三小啦', `你已經參加了！！`]);
 			}
 			bomb = await bomb.join(user);
 			const players = await bomb.getPlayers();
@@ -201,9 +212,9 @@ async function handleText(info, message, replyToken, source) {
 		}
 		case 33: {
 			//小雷+抓到炸彈魔
-			let bomb = await core.findBomb(channel, [ 'STARTED' ]);
+			let bomb = await core.findBomb(channel, ['STARTED']);
 			bomb = await bomb.inactivate(user);
-			const texts = [ `${user.displayName}已解除炸彈` ];
+			const texts = [`${user.displayName}已解除炸彈`];
 			const activate = await bomb.getActivate();
 			!_.isEmpty(activate) && texts.push(`尚未拆彈：\n${_.map(activate, 'displayName').join(', ')}`);
 			return replyText(replyToken, texts);
@@ -230,7 +241,7 @@ async function handleBomb(bomb) {
 	const { channel } = bomb.toJSON();
 	const { key } = channel;
 
-	await pushText(key, [ `要爆了～`, `啊～～～` ]);
+	await pushText(key, [`要爆了～`, `啊～～～`]);
 	const results = await bomb.end();
 	const situations = _.map(results, (obj) => obj.toJSON());
 	const inactivate = _(situations).filter('inactivate').orderBy('inactivate');
@@ -379,7 +390,7 @@ function typing(cmd) {
 }
 
 app.post('/', middleware(lineConfig), (req, res) => {
-	Promise.all(req.body.events.map(handleEvent)).then(function(result) {
+	Promise.all(req.body.events.map(handleEvent)).then(function (result) {
 		res.json(result);
 	});
 });
