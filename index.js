@@ -129,10 +129,7 @@ async function handleText(info, message, replyToken, source) {
 			console.log(cmds);
 
 			if (cmds.length < 3) {
-				return client.replyMessage(event.replyToken, {
-					type: 'text',
-					text: '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30'
-				});
+				return replyText(replyToken, [ '請輸入：小雷裝炸彈 日期 時間\n小雷裝炸彈 2018-10-04 10:30' ]);
 			}
 			const timestamp = +moment(_.drop(cmds).join('T'));
 			await core.setupBomb(channel, user, timestamp);
@@ -236,11 +233,9 @@ async function handleBomb(bomb) {
 	await pushText(key, [ `要爆了～`, `啊～～～` ]);
 	const results = await bomb.end();
 	const situations = _.map(results, (obj) => obj.toJSON());
-	// console.log('situations:', beautify(situations, null, 2, 80));
 	const inactivate = _(situations).filter('inactivate').orderBy('inactivate');
 	const activate = _(situations).reject('inactivate');
-	console.log('inactivate:', beautify(inactivate, null, 2, 80));
-	console.log('activate:', beautify(activate, null, 2, 80));
+
 	await client.pushMessage(key, {
 		type: 'flex',
 		altText: 'This is a Flex Message',
